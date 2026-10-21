@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>ザンリーグ三麻シミュレーション 第4回 待ちが悪いときは即リーチか</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* 卓のフェルトの緑を地の色に、赤5の朱を差し色に。縦1段の読み物、数字は表と横棒 */
+:root {
+  --bg: #f3f5f2; --paper: #ffffff; --fg: #1d2420; --sub: #5b665f; --line: #d9dfda;
+  --felt: #1f6b4f; --felt-soft: #e2efe8; --aka: #c2412d; --warn-bg: #fbeee9;
+  --display: "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+  --body: "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #121815; --paper: #1a221e; --fg: #e6ece8; --sub: #9aa8a0; --line: #2c3832;
+  --felt: #5fbf95; --felt-soft: #1f3329; --aka: #f07a63; --warn-bg: #3a221d; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #121815; --paper: #1a221e; --fg: #e6ece8; --sub: #9aa8a0; --line: #2c3832;
+  --felt: #5fbf95; --felt-soft: #1f3329; --aka: #f07a63; --warn-bg: #3a221d; color-scheme: dark; }
+body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 15px; line-height: 1.75;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 28px 56px; }
+.wrap { max-width: 760px; margin: 0 auto; display: grid; gap: 28px; }
+header h1 { font-family: var(--display); font-weight: 900; font-size: clamp(24px, 5vw, 34px); line-height: 1.3; margin: 4px 0 8px; text-wrap: balance; }
+.eyebrow { font-size: 12px; letter-spacing: .12em; color: var(--felt); font-weight: 700; }
+.lead { color: var(--sub); margin: 0; }
+section { background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 20px max(16px, 3vw); display: grid; gap: 12px; min-width: 0; }
+h2 { font-size: 19px; font-weight: 900; margin: 0; text-wrap: balance; }
+h3 { font-size: 15px; font-weight: 700; margin: 8px 0 0; }
+p { margin: 0; }
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.kpi { background: var(--felt-soft); border-radius: 8px; padding: 12px 14px; }
+.kpi b { display: block; font-family: var(--mono); font-size: 24px; color: var(--felt); font-variant-numeric: tabular-nums; }
+.kpi span { font-size: 13px; color: var(--sub); }
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 620px) { .split { grid-template-columns: 1fr; } }
+.box { border-radius: 8px; padding: 14px; display: grid; gap: 6px; min-width: 0; }
+.ok { background: var(--felt-soft); } .ng { background: var(--warn-bg); }
+.box h3 { margin: 0; } .ok h3 { color: var(--felt); } .ng h3 { color: var(--aka); }
+.box ul { margin: 0; padding-left: 1.2em; }
+.tbl { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; font-size: 14px; }
+th, td { text-align: right; padding: 6px 8px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th:first-child, td:first-child { text-align: left; }
+th { font-size: 12px; color: var(--sub); font-weight: 500; }
+td.dim { color: var(--sub); }
+.bar { display: grid; grid-template-columns: 4.5em 1fr 7.5em; align-items: center; gap: 10px; font-size: 14px; }
+.bt { background: var(--felt-soft); border-radius: 4px; height: 14px; overflow: hidden; }
+.bt i { display: block; height: 100%; background: var(--felt); }
+.bar.red .bt i { background: var(--aka); }
+.bv { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.bv small { color: var(--sub); margin-left: 6px; font-family: var(--body); }
+.note { font-size: 13px; color: var(--sub); }
+.notes { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; }
+ol.steps { margin: 0; padding-left: 1.4em; display: grid; gap: 4px; }
+.back { font-size: 13px; margin: 0; } .back a { color: var(--felt); }
+td.plus b { color: var(--felt); } td.minus b { color: var(--aka); }
+td small { color: var(--sub); font-size: 12px; }
+@media (max-width: 620px) { td:first-child { white-space: normal; min-width: 6em; } th, td { padding: 6px 5px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+<p class="back"><a href="./">← 研究ノートの一覧</a></p>
+<header>
+  <div class="eyebrow">ザンリーグ 企業リーグのルール ・ 2026年10月21日</div>
+  <h1>ザンリーグ三麻シミュレーション 第4回 待ちが悪いときは即リーチか</h1>
+  <p class="lead">嵌張・辺張・単騎・シャボのように待ちが悪いテンパイで、即リーチ・手替わりを待つ・シャンテン戻しのどれが得か。同じ牌山で3通りに打ち直して比べました。</p>
+</header>
+
+<section>
+  <h2>結論</h2>
+  <div class="kpis">
+    <div class="kpi"><b>-0.7</b><span>手替わりを待つと変わるチップ（即リーチと比べて）</span></div>
+    <div class="kpi"><b>-1.7</b><span>シャンテン戻しで変わるチップ（即リーチと比べて）</span></div>
+  </div>
+  <ul class="notes">
+    <li>待ちが悪くても、即リーチが得でした。待ちの形・巡目・役の有無で分けても、ほぼどこでも同じです。七対子以外の単騎だけは、手替わりを待っても五分でした（-0.03）。単騎は待ち牌を選び直せるためと見ています。</li>
+    <li>手替わりを待つのは、序盤ほど損です（-0.99）。待っている間に、一発・裏ドラ・白ポッチの祝儀と、先にリーチする有利を手放すためと見ています。</li>
+    <li>シャンテン戻しは、どの形・どの巡目でも損でした。</li>
+  </ul>
+</section>
+
+<section>
+  <h2>どう打たせたか</h2>
+  <ul class="notes">
+    <li>ルール・オリの決め方は第2回と同じです。相手はリーチを受けると、テンパイしていない手はオリます（高い1シャンテンは押す）。愚形リーチの和了の半分以上はツモでした。</li>
+    <li>3人とも即リーチで3,000半荘打ち、テンパイしてすぐリーチする手のうち、自分から見えていない待ち牌が2〜4枚の局面（26,941局面）を拾いました。</li>
+    <li>局面ごとに、その人だけをその局のあいだ次の打ち方に替えて、同じ牌山のまま半荘の最後まで打ち直し、最終チップを比べています。
+      <ul>
+        <li>手替わりを待つ：リーチせずテンパイのまま打ち、見えていない待ち牌が5枚以上になったらリーチ。残りのツモが15枚になるか、相手がリーチしたら、その時の待ちでリーチ。</li>
+        <li>シャンテン戻し：テンパイを外し、引けば待ち牌5枚以上のテンパイになる牌が一番多い1シャンテンに戻す。七対子の単騎のように戻しても良い待ちにならない局面は、この比べ方から外しました。</li>
+      </ul>
+    </li>
+    <li>待ち牌が0〜1枚のテンパイは、和了れない・和了りにくい待ちなので、リーチせずに戻すのが当然です。比べる意味が無いので表から外しています。</li>
+  </ul>
+</section>
+
+<section>
+  <h2>局面ごとの損得</h2>
+  <div class="tbl"><table><thead><tr><th>局面</th><th>局面の数</th><th>手替わりを待つ</th><th>シャンテン戻し</th></tr></thead><tbody><tr><td>全部</td><td>26,941</td><td class="minus"><b>-0.67</b> <small>±0.05</small></td><td class="minus"><b>-1.68</b> <small>±0.09</small></td></tr><tr><td>待ち牌 2枚</td><td>2,461</td><td class="minus"><b>-0.25</b> <small>±0.15</small></td><td class="minus"><b>-1.12</b> <small>±0.29</small></td></tr><tr><td>待ち牌 3枚</td><td>13,484</td><td class="minus"><b>-0.60</b> <small>±0.07</small></td><td class="minus"><b>-1.87</b> <small>±0.17</small></td></tr><tr><td>待ち牌 4枚</td><td>10,996</td><td class="minus"><b>-0.86</b> <small>±0.08</small></td><td class="minus"><b>-1.67</b> <small>±0.12</small></td></tr><tr><td>嵌張</td><td>7,821</td><td class="minus"><b>-0.53</b> <small>±0.10</small></td><td class="minus"><b>-1.26</b> <small>±0.15</small></td></tr><tr><td>辺張</td><td>3,224</td><td class="minus"><b>-0.85</b> <small>±0.15</small></td><td class="minus"><b>-1.20</b> <small>±0.22</small></td></tr><tr><td>単騎（七対子を除く）</td><td>456</td><td class="minus"><b>-0.03</b> <small>±0.38</small></td><td class="minus"><b>-1.55</b> <small>±0.58</small></td></tr><tr><td>七対子の単騎</td><td>8,403</td><td class="minus"><b>-0.64</b> <small>±0.08</small></td><td class="minus"><b>-3.07</b> <small>±0.48</small></td></tr><tr><td>シャボ</td><td>6,196</td><td class="minus"><b>-0.90</b> <small>±0.10</small></td><td class="minus"><b>-2.12</b> <small>±0.17</small></td></tr><tr><td>序盤（残りのツモ40枚以上）</td><td>10,981</td><td class="minus"><b>-0.99</b> <small>±0.10</small></td><td class="minus"><b>-1.35</b> <small>±0.14</small></td></tr><tr><td>中盤（残り25〜39枚）</td><td>10,810</td><td class="minus"><b>-0.62</b> <small>±0.07</small></td><td class="minus"><b>-1.95</b> <small>±0.15</small></td></tr><tr><td>終盤（残り24枚以下）</td><td>5,150</td><td class="minus"><b>-0.11</b> <small>±0.04</small></td><td class="minus"><b>-1.87</b> <small>±0.24</small></td></tr><tr><td>役あり</td><td>14,626</td><td class="minus"><b>-0.61</b> <small>±0.06</small></td><td class="minus"><b>-2.03</b> <small>±0.16</small></td></tr><tr><td>役なし</td><td>12,315</td><td class="minus"><b>-0.76</b> <small>±0.08</small></td><td class="minus"><b>-1.47</b> <small>±0.12</small></td></tr></tbody></table></div>
+  <p class="note">即リーチと比べた、その人の1半荘の最終チップの差。マイナスは即リーチが得。±は平均のぶれ（標準誤差）。</p>
+</section>
+
+<section>
+  <h2>まだ入っていないもの</h2>
+  <ul class="notes">
+    <li>鳴き（ポン）・槓。このルールは鳴くと一発・裏ドラ・白ポッチの祝儀を手放すので、仕掛けの損得を次に調べます。</li>
+  </ul>
+</section>
+</div>
+
+</body>
+</html>
