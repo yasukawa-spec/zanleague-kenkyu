@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>ザンリーグ三麻シミュレーション 第3回 リーチかダマか</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* 卓のフェルトの緑を地の色に、赤5の朱を差し色に。縦1段の読み物、数字は表と横棒 */
+:root {
+  --bg: #f3f5f2; --paper: #ffffff; --fg: #1d2420; --sub: #5b665f; --line: #d9dfda;
+  --felt: #1f6b4f; --felt-soft: #e2efe8; --aka: #c2412d; --warn-bg: #fbeee9;
+  --display: "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+  --body: "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #121815; --paper: #1a221e; --fg: #e6ece8; --sub: #9aa8a0; --line: #2c3832;
+  --felt: #5fbf95; --felt-soft: #1f3329; --aka: #f07a63; --warn-bg: #3a221d; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #121815; --paper: #1a221e; --fg: #e6ece8; --sub: #9aa8a0; --line: #2c3832;
+  --felt: #5fbf95; --felt-soft: #1f3329; --aka: #f07a63; --warn-bg: #3a221d; color-scheme: dark; }
+body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 15px; line-height: 1.75;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 28px 56px; }
+.wrap { max-width: 760px; margin: 0 auto; display: grid; gap: 28px; }
+header h1 { font-family: var(--display); font-weight: 900; font-size: clamp(24px, 5vw, 34px); line-height: 1.3; margin: 4px 0 8px; text-wrap: balance; }
+.eyebrow { font-size: 12px; letter-spacing: .12em; color: var(--felt); font-weight: 700; }
+.lead { color: var(--sub); margin: 0; }
+section { background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 20px max(16px, 3vw); display: grid; gap: 12px; min-width: 0; }
+h2 { font-size: 19px; font-weight: 900; margin: 0; text-wrap: balance; }
+h3 { font-size: 15px; font-weight: 700; margin: 8px 0 0; }
+p { margin: 0; }
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.kpi { background: var(--felt-soft); border-radius: 8px; padding: 12px 14px; }
+.kpi b { display: block; font-family: var(--mono); font-size: 24px; color: var(--felt); font-variant-numeric: tabular-nums; }
+.kpi span { font-size: 13px; color: var(--sub); }
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 620px) { .split { grid-template-columns: 1fr; } }
+.box { border-radius: 8px; padding: 14px; display: grid; gap: 6px; min-width: 0; }
+.ok { background: var(--felt-soft); } .ng { background: var(--warn-bg); }
+.box h3 { margin: 0; } .ok h3 { color: var(--felt); } .ng h3 { color: var(--aka); }
+.box ul { margin: 0; padding-left: 1.2em; }
+.tbl { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; font-size: 14px; }
+th, td { text-align: right; padding: 6px 8px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th:first-child, td:first-child { text-align: left; }
+th { font-size: 12px; color: var(--sub); font-weight: 500; }
+td.dim { color: var(--sub); }
+.bar { display: grid; grid-template-columns: 4.5em 1fr 7.5em; align-items: center; gap: 10px; font-size: 14px; }
+.bt { background: var(--felt-soft); border-radius: 4px; height: 14px; overflow: hidden; }
+.bt i { display: block; height: 100%; background: var(--felt); }
+.bar.red .bt i { background: var(--aka); }
+.bv { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.bv small { color: var(--sub); margin-left: 6px; font-family: var(--body); }
+.note { font-size: 13px; color: var(--sub); }
+.notes { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; }
+ol.steps { margin: 0; padding-left: 1.4em; display: grid; gap: 4px; }
+.back { font-size: 13px; margin: 0; } .back a { color: var(--felt); }
+td.plus b { color: var(--felt); } td.minus b { color: var(--aka); }
+td small { color: var(--sub); font-size: 12px; }
+@media (max-width: 620px) { td:first-child { white-space: normal; min-width: 7em; } th, td { padding: 6px 5px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+<p class="back"><a href="./">← 研究ノートの一覧</a></p>
+<header>
+  <div class="eyebrow">ザンリーグ 企業リーグのルール ・ 2026年10月21日</div>
+  <h1>ザンリーグ三麻シミュレーション 第3回 リーチかダマか</h1>
+  <p class="lead">役があってダマでも和了れる手は、リーチとダマのどちらが得か。打ち方の違うAIの打ち比べと、同じ牌山で1回だけダマに変えて打ち直す方法の2通りで調べました。</p>
+</header>
+
+<section>
+  <h2>結論</h2>
+  <div class="kpis">
+    <div class="kpi"><b>-1.4</b><span>1回ダマにすると変わるチップ（20,652局面の平均）</span></div>
+    <div class="kpi"><b>-0.3</b><span>残りのツモ9枚以下でも、1回ダマにすると変わるチップ</span></div>
+  </div>
+  <ul class="notes">
+    <li>このルールでは、テンパイしたらすぐリーチが得でした。オーラスでも、ダマで満貫・跳満あっても、親でも子でも同じです。</li>
+    <li>一発・裏ドラ・白ポッチの祝儀はリーチしないと付きません。ダマにしても和了は増えず、祝儀と打点だけが減ります。</li>
+    <li>ダマとの差が一番小さいのは、残りのツモが少ないとき（-0.32チップ）で、ほぼ五分です。</li>
+  </ul>
+</section>
+
+<section>
+  <h2>どう打たせたか</h2>
+  <ul class="notes">
+    <li>ルール・オリの決め方は第2回と同じです（相手のリーチにはオリる、高い1シャンテンは押す、鳴きなし）。</li>
+    <li>ダマにするのは、どの待ちでもリーチなしでロンできる手だけ。役が無ければリーチします。</li>
+    <li>相手のAIは、リーチにはオリてダマには押します。ダマで相手の押しを誘える得も、数字に入っています。</li>
+  </ul>
+</section>
+
+<section>
+  <h2>打ち比べ：ダマ1人とすぐリーチ2人</h2>
+  <p>ダマの打ち方を3通り作り、それぞれ3,000半荘。席は半荘ごとに回しています。</p>
+  <div class="tbl"><table><thead><tr><th>ダマの打ち方</th><th>ダマのAI</th><th>すぐリーチのAI</th><th>差</th></tr></thead><tbody><tr><td>役があれば全部ダマ</td><td class="minus"><b>-3.12</b> <small>±0.28</small></td><td class="plus"><b>+1.56</b> <small>±0.21</small></td><td><b>4.7</b></td></tr><tr><td>ダマで満貫以上ならダマ</td><td class="minus"><b>-2.32</b> <small>±0.28</small></td><td class="plus"><b>+1.16</b> <small>±0.21</small></td><td><b>3.5</b></td></tr><tr><td>待ちが悪く役があればダマ</td><td class="minus"><b>-2.03</b> <small>±0.29</small></td><td class="plus"><b>+1.01</b> <small>±0.21</small></td><td><b>3.0</b></td></tr></tbody></table></div>
+  <p class="note">チップは1半荘あたり。±は平均のぶれ（標準誤差）。どれもダマを混ぜるほど損で、ダマにする手が多い打ち方ほど損が大きくなりました。</p>
+  <h3>なぜ損か（役があれば全部ダマの卓）</h3>
+  <div class="tbl"><table><thead><tr><th>AI</th><th>和了率</th><th>和了の平均</th><th>一発・裏・白ポッチの祝儀（1半荘）</th></tr></thead><tbody><tr><td>役があれば全部ダマ</td><td>30.8%</td><td>5.61翻</td><td>1.61枚</td></tr><tr><td>すぐリーチ</td><td>30.9%</td><td>6.47翻</td><td>3.15枚</td></tr></tbody></table></div>
+  <p class="note">和了率はほとんど変わらず、祝儀は約半分、手は約1翻安くなります。</p>
+</section>
+
+<section>
+  <h2>打ち直し：同じ牌山で1回だけダマにする</h2>
+  <p>3人ともすぐリーチで3,000半荘打ち、役がありダマでも和了れる手でリーチした局面を全部（20,652局面）拾いました。その1回だけダマに変えて、同じ牌山のまま半荘の最後まで打ち直し、その人の最終チップを比べています。違うのはその判断だけです。</p>
+  <div class="tbl"><table><thead><tr><th>局面</th><th>局面の数</th><th>ダマにすると</th></tr></thead><tbody><tr><td>全部</td><td>20,652</td><td class="minus"><b>-1.40</b> <small>±0.06</small></td></tr><tr><td>オーラスでトップ目</td><td>723</td><td class="minus"><b>-0.98</b> <small>±0.20</small></td></tr><tr><td>オーラスで2着目</td><td>757</td><td class="minus"><b>-1.62</b> <small>±0.26</small></td></tr><tr><td>オーラスでラス目</td><td>729</td><td class="minus"><b>-1.80</b> <small>±0.26</small></td></tr><tr><td>残りのツモ9枚以下（3人で3巡）</td><td>819</td><td class="minus"><b>-0.32</b> <small>±0.15</small></td></tr><tr><td>残りのツモ10〜29枚</td><td>5,509</td><td class="minus"><b>-1.13</b> <small>±0.10</small></td></tr><tr><td>残りのツモ30枚以上</td><td>14,324</td><td class="minus"><b>-1.57</b> <small>±0.08</small></td></tr><tr><td>ダマで1〜2翻</td><td>2,260</td><td class="minus"><b>-1.70</b> <small>±0.19</small></td></tr><tr><td>ダマで3翻</td><td>2,910</td><td class="minus"><b>-1.58</b> <small>±0.16</small></td></tr><tr><td>ダマで満貫</td><td>7,852</td><td class="minus"><b>-1.51</b> <small>±0.10</small></td></tr><tr><td>ダマで跳満以上</td><td>7,630</td><td class="minus"><b>-1.14</b> <small>±0.11</small></td></tr><tr><td>親</td><td>7,142</td><td class="minus"><b>-1.60</b> <small>±0.12</small></td></tr><tr><td>子</td><td>13,510</td><td class="minus"><b>-1.30</b> <small>±0.07</small></td></tr></tbody></table></div>
+  <p class="note">マイナスはリーチが得。45%の局面は、ダマにしても最終チップが変わりませんでした。局面を2〜3個組み合わせても、ダマが得とはっきり言える組はありませんでした。持ち点2,000点以下でのリーチは数が少なく（79局面）、ここはまだ言えません。</p>
+</section>
+
+<section>
+  <h2>まだ入っていないもの</h2>
+  <ul class="notes">
+    <li>シャンテン戻し（テンパイを外して、より良い待ちや高い手を狙う）。</li>
+    <li>鳴き（ポン）・槓。</li>
+  </ul>
+  <p class="note">次の回では、シャンテン戻しを調べる予定です。</p>
+</section>
+</div>
+
+</body>
+</html>
