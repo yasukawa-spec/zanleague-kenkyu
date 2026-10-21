@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>ザンリーグ三麻シミュレーション 第1回</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* 卓のフェルトの緑を地の色に、赤5の朱を差し色に。縦1段の読み物、数字は表と横棒 */
+:root {
+  --bg: #f3f5f2; --paper: #ffffff; --fg: #1d2420; --sub: #5b665f; --line: #d9dfda;
+  --felt: #1f6b4f; --felt-soft: #e2efe8; --aka: #c2412d; --warn-bg: #fbeee9;
+  --display: "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+  --body: "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #121815; --paper: #1a221e; --fg: #e6ece8; --sub: #9aa8a0; --line: #2c3832;
+  --felt: #5fbf95; --felt-soft: #1f3329; --aka: #f07a63; --warn-bg: #3a221d; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #121815; --paper: #1a221e; --fg: #e6ece8; --sub: #9aa8a0; --line: #2c3832;
+  --felt: #5fbf95; --felt-soft: #1f3329; --aka: #f07a63; --warn-bg: #3a221d; color-scheme: dark; }
+body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 15px; line-height: 1.75;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 28px 56px; }
+.wrap { max-width: 760px; margin: 0 auto; display: grid; gap: 28px; }
+header h1 { font-family: var(--display); font-weight: 900; font-size: clamp(24px, 5vw, 34px); line-height: 1.3; margin: 4px 0 8px; text-wrap: balance; }
+.eyebrow { font-size: 12px; letter-spacing: .12em; color: var(--felt); font-weight: 700; }
+.lead { color: var(--sub); margin: 0; }
+section { background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 20px max(16px, 3vw); display: grid; gap: 12px; min-width: 0; }
+h2 { font-size: 19px; font-weight: 900; margin: 0; text-wrap: balance; }
+h3 { font-size: 15px; font-weight: 700; margin: 8px 0 0; }
+p { margin: 0; }
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.kpi { background: var(--felt-soft); border-radius: 8px; padding: 12px 14px; }
+.kpi b { display: block; font-family: var(--mono); font-size: 24px; color: var(--felt); font-variant-numeric: tabular-nums; }
+.kpi span { font-size: 13px; color: var(--sub); }
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 620px) { .split { grid-template-columns: 1fr; } }
+.box { border-radius: 8px; padding: 14px; display: grid; gap: 6px; min-width: 0; }
+.ok { background: var(--felt-soft); } .ng { background: var(--warn-bg); }
+.box h3 { margin: 0; } .ok h3 { color: var(--felt); } .ng h3 { color: var(--aka); }
+.box ul { margin: 0; padding-left: 1.2em; }
+.tbl { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; font-size: 14px; }
+th, td { text-align: right; padding: 6px 8px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th:first-child, td:first-child { text-align: left; }
+th { font-size: 12px; color: var(--sub); font-weight: 500; }
+td.dim { color: var(--sub); }
+.bar { display: grid; grid-template-columns: 4.5em 1fr 7.5em; align-items: center; gap: 10px; font-size: 14px; }
+.bt { background: var(--felt-soft); border-radius: 4px; height: 14px; overflow: hidden; }
+.bt i { display: block; height: 100%; background: var(--felt); }
+.bar.red .bt i { background: var(--aka); }
+.bv { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.bv small { color: var(--sub); margin-left: 6px; font-family: var(--body); }
+.note { font-size: 13px; color: var(--sub); }
+.notes { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; }
+ol.steps { margin: 0; padding-left: 1.4em; display: grid; gap: 4px; }
+.back { font-size: 13px; margin: 0; } .back a { color: var(--felt); }
+</style>
+</head>
+<body>
+<div class="wrap">
+<p class="back"><a href="./">← 研究ノートの一覧</a></p>
+<header>
+  <div class="eyebrow">ザンリーグ 企業リーグのルール ・ 2026年10月21日</div>
+  <h1>ザンリーグ三麻シミュレーション 第1回</h1>
+  <p class="lead">ザンリーグのルールでAI3人に1,000半荘（7,708局）を打たせた結果です。最初の版なので、ルールどおりに正しく動くかを確かめるのが一番の目的です。</p>
+</header>
+
+<section>
+  <h2>どう打たせたか</h2>
+  <ul class="notes">
+    <li>ルールはザンリーグの公式ルールのページと競技規定のとおり（チップ表・祝儀・白ポッチ・華牌・赤5・北の役牌・純カラ・1,000点リーチなど）。</li>
+    <li>AIの打ち方はわざと単純にしています。鳴かない、テンパイしたらすぐリーチ、和了れたら必ず和了る、<b>オリない</b>（相手のリーチにも押す）。</li>
+  </ul>
+  <div class="kpis">
+    <div class="kpi"><b>1,000</b><span>半荘</span></div>
+    <div class="kpi"><b>7,708</b><span>局</span></div>
+    <div class="kpi"><b>0件</b><span>点数・チップの合計のずれ</span></div>
+  </div>
+  <p class="note">毎局「持ち点＋供託＝15万点」、毎半荘「3人のチップの合計＝0」を確かめ、全部合っていました。</p>
+</section>
+
+<section>
+  <h2>どの数字を信じてよいか</h2>
+  <div class="split">
+    <div class="box ok"><h3>信じてよい</h3>
+      <ul><li>ルールの計算（点数・チップ・祝儀・連荘・トビ）</li>
+      <li>和了った手に入っている赤・華・ドラの数</li>
+      <li>リーチで和了ったときの裏ドラの数</li></ul>
+      <p class="note">打ち方より、牌の組み合わせで決まる数字です。</p></div>
+    <div class="box ng"><h3>まだ信じない</h3>
+      <ul><li>和了率・放銃率・一発の率</li>
+      <li>待ちの形ごとの和了率</li>
+      <li>国士無双の多さ（70回）</li></ul>
+      <p class="note">AIがオリないので、実戦より高く出ます。オリを入れた次の版で出し直します。</p></div>
+  </div>
+</section>
+
+<section>
+  <h2>このルールは手が高い</h2>
+  <p>和了の <b>89%</b> が満貫以上でした。筒子・索子の5が全部赤で、華牌も1枚1翻になるためです。</p>
+  <div class="kpis">
+    <div class="kpi"><b>1.59枚</b><span>和了1回あたりの赤</span></div>
+    <div class="kpi"><b>0.91枚</b><span>和了1回あたりの華</span></div>
+    <div class="kpi"><b>0.62枚</b><span>和了1回あたりの表ドラ</span></div>
+  </div>
+  <h3>和了の打点（7,584回）</h3>
+  <div class="bar "><span class="bl">1翻</span><span class="bt"><i style="width:1.3%"></i></span><span class="bv">32<small>0.4%</small></span></div>
+<div class="bar "><span class="bl">2翻</span><span class="bt"><i style="width:8.0%"></i></span><span class="bv">197<small>2.6%</small></span></div>
+<div class="bar "><span class="bl">3翻</span><span class="bt"><i style="width:23.3%"></i></span><span class="bv">572<small>7.5%</small></span></div>
+<div class="bar "><span class="bl">満貫</span><span class="bt"><i style="width:93.6%"></i></span><span class="bv">2,298<small>30.3%</small></span></div>
+<div class="bar "><span class="bl">跳満</span><span class="bt"><i style="width:100.0%"></i></span><span class="bv">2,454<small>32.4%</small></span></div>
+<div class="bar "><span class="bl">倍満</span><span class="bt"><i style="width:67.2%"></i></span><span class="bv">1,648<small>21.7%</small></span></div>
+<div class="bar "><span class="bl">三倍満</span><span class="bt"><i style="width:10.2%"></i></span><span class="bv">250<small>3.3%</small></span></div>
+<div class="bar "><span class="bl">役満</span><span class="bt"><i style="width:5.4%"></i></span><span class="bv">133<small>1.8%</small></span></div>
+  <p class="note">役満133回のうち、役満の役は75回（国士無双 70回・四暗刻 4回・萬子混一色 1回）、残りの58回は13翻以上の数え役満（祝儀なし）。</p>
+</section>
+
+<section>
+  <h2>リーチの裏ドラ</h2>
+  <p>リーチで和了った7,564回で、裏ドラは平均 <b>0.50枚</b>、1枚以上乗ったのは <b>35.1%</b> でした。裏ドラは1枚につき祝儀1枚（ツモなら2人から）なので、裏ドラの祝儀だけで、ロンなら和了1回あたり平均約0.5枚、ツモならその倍です。</p>
+  <div class="tbl"><table><thead><tr><th>裏ドラ</th><th>回数</th><th>割合</th></tr></thead><tbody><tr><td>0枚</td><td>4,908</td><td>64.9%</td></tr><tr><td>1枚</td><td>1,757</td><td>23.2%</td></tr><tr><td>2枚</td><td>703</td><td>9.3%</td></tr><tr><td>3枚</td><td>191</td><td>2.5%</td></tr><tr><td>4枚</td><td>5</td><td>0.1%</td></tr></tbody></table></div>
+  <p class="note">白ポッチでの和了は、リーチ和了の 5.1% でした（リーチ後に引けば和了り）。</p>
+</section>
+
+<section>
+  <h2>順位ごとのチップ（1半荘の平均）</h2>
+  <div class="tbl"><table><thead><tr><th>順位</th><th>順位のチップ</th><th>祝儀</th><th>合計</th></tr></thead><tbody><tr><td>1着</td><td>+15.20</td><td>+3.73</td><td><b>+18.93</b></td></tr><tr><td>2着</td><td>-1.04</td><td>+0.25</td><td><b>-0.79</b></td></tr><tr><td>3着</td><td>-14.16</td><td>-3.98</td><td><b>-18.15</b></td></tr></tbody></table></div>
+  <p class="note">1着のチップは2着と3着の支払いの合計です。祝儀は1半荘で1人あたり平均約4枚動き、1着の人が多く受け取っています。</p>
+  <h3>半荘の終わり方</h3>
+  <div class="tbl"><table><thead><tr><th>終わり方</th><th>半荘</th><th>割合</th></tr></thead><tbody><tr><td>南3局終了（西入なし）</td><td>488</td><td>48.8%</td></tr><tr><td>トビ終了</td><td>361</td><td>36.1%</td></tr><tr><td>和了やめ／聴牌やめ</td><td>151</td><td>15.1%</td></tr></tbody></table></div>
+  <p class="note">トビ終了が多いのは、AIがオリないためです。</p>
+</section>
+
+<section>
+  <h2>局の終わり方とよく出た役</h2>
+  <div class="bar red"><span class="bl">ツモ</span><span class="bt"><i style="width:63.8%"></i></span><span class="bv">2,887<small>37.5%</small></span></div>
+<div class="bar red"><span class="bl">ロン</span><span class="bt"><i style="width:100.0%"></i></span><span class="bv">4,523<small>58.7%</small></span></div>
+<div class="bar red"><span class="bl">ダブロン</span><span class="bt"><i style="width:1.9%"></i></span><span class="bv">87<small>1.1%</small></span></div>
+<div class="bar red"><span class="bl">流局</span><span class="bt"><i style="width:4.7%"></i></span><span class="bv">211<small>2.7%</small></span></div>
+  <h3>よく出た役（和了7,584回のうち）</h3>
+  <div class="tbl"><table><thead><tr><th>役</th><th>回数</th><th>割合</th></tr></thead><tbody><tr><td>立直</td><td>7,536</td><td>99.4%</td></tr><tr><td>門前清自摸和</td><td>2,887</td><td>38.1%</td></tr><tr><td>一発</td><td>1,993</td><td>26.3%</td></tr><tr><td>役牌</td><td>1,387</td><td>18.3%</td></tr><tr><td>七対子</td><td>1,196</td><td>15.8%</td></tr><tr><td>平和</td><td>851</td><td>11.2%</td></tr><tr><td>一盃口</td><td>555</td><td>7.3%</td></tr><tr><td>断幺九</td><td>250</td><td>3.3%</td></tr><tr><td>一気通貫</td><td>158</td><td>2.1%</td></tr><tr><td>混一色</td><td>121</td><td>1.6%</td></tr><tr><td>三暗刻</td><td>91</td><td>1.2%</td></tr><tr><td>連風牌</td><td>75</td><td>1.0%</td></tr></tbody></table></div>
+</section>
+
+<section>
+  <h2>リーチの待ちの形（参考）</h2>
+  <p class="note">リーチした時点の待ちの形と、その時に見えていなかった待ち牌の枚数です。灰色の和了率・放銃率は、オリが無いぶん高く出ています。</p>
+  <div class="tbl"><table><thead><tr><th>待ち</th><th>リーチ</th><th>残り枚数</th><th>和了率</th><th>放銃率</th></tr></thead><tbody><tr><td>両面</td><td>3,252</td><td>6.4枚</td><td class="dim">70.5%</td><td class="dim">8.4%</td></tr><tr><td>単騎</td><td>2,869</td><td>2.9枚</td><td class="dim">45.9%</td><td class="dim">13.8%</td></tr><tr><td>嵌張</td><td>2,616</td><td>3.5枚</td><td class="dim">55.0%</td><td class="dim">14.0%</td></tr><tr><td>シャボ</td><td>2,119</td><td>3.2枚</td><td class="dim">56.5%</td><td class="dim">11.8%</td></tr><tr><td>辺張</td><td>1,201</td><td>3.5枚</td><td class="dim">54.7%</td><td class="dim">14.0%</td></tr><tr><td>多面</td><td>703</td><td>7.9枚</td><td class="dim">77.8%</td><td class="dim">6.1%</td></tr><tr><td>国士</td><td>127</td><td>2.6枚</td><td class="dim">55.1%</td><td class="dim">14.2%</td></tr><tr><td>ノベタン</td><td>61</td><td>5.2枚</td><td class="dim">72.1%</td><td class="dim">6.6%</td></tr></tbody></table></div>
+</section>
+
+<section>
+  <h2>次の版でやること</h2>
+  <ol class="steps">
+    <li>オリを入れる。待ちの形ごとの和了率を、実戦に近い数字で出す。</li>
+    <li>リーチかダマか・シャンテン戻しを切り替え、同じ配牌で打ち比べてチップの差を見る。</li>
+    <li>鳴きを入れる。</li>
+  </ol>
+</section>
+
+</div>
+
+</body>
+</html>
