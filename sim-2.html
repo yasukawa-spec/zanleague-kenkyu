@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>ザンリーグ三麻シミュレーション 第2回 オリと押し引き</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* 卓のフェルトの緑を地の色に、赤5の朱を差し色に。縦1段の読み物、数字は表と横棒 */
+:root {
+  --bg: #f3f5f2; --paper: #ffffff; --fg: #1d2420; --sub: #5b665f; --line: #d9dfda;
+  --felt: #1f6b4f; --felt-soft: #e2efe8; --aka: #c2412d; --warn-bg: #fbeee9;
+  --display: "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+  --body: "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #121815; --paper: #1a221e; --fg: #e6ece8; --sub: #9aa8a0; --line: #2c3832;
+  --felt: #5fbf95; --felt-soft: #1f3329; --aka: #f07a63; --warn-bg: #3a221d; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #121815; --paper: #1a221e; --fg: #e6ece8; --sub: #9aa8a0; --line: #2c3832;
+  --felt: #5fbf95; --felt-soft: #1f3329; --aka: #f07a63; --warn-bg: #3a221d; color-scheme: dark; }
+body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 15px; line-height: 1.75;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 28px 56px; }
+.wrap { max-width: 760px; margin: 0 auto; display: grid; gap: 28px; }
+header h1 { font-family: var(--display); font-weight: 900; font-size: clamp(24px, 5vw, 34px); line-height: 1.3; margin: 4px 0 8px; text-wrap: balance; }
+.eyebrow { font-size: 12px; letter-spacing: .12em; color: var(--felt); font-weight: 700; }
+.lead { color: var(--sub); margin: 0; }
+section { background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 20px max(16px, 3vw); display: grid; gap: 12px; min-width: 0; }
+h2 { font-size: 19px; font-weight: 900; margin: 0; text-wrap: balance; }
+h3 { font-size: 15px; font-weight: 700; margin: 8px 0 0; }
+p { margin: 0; }
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.kpi { background: var(--felt-soft); border-radius: 8px; padding: 12px 14px; }
+.kpi b { display: block; font-family: var(--mono); font-size: 24px; color: var(--felt); font-variant-numeric: tabular-nums; }
+.kpi span { font-size: 13px; color: var(--sub); }
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 620px) { .split { grid-template-columns: 1fr; } }
+.box { border-radius: 8px; padding: 14px; display: grid; gap: 6px; min-width: 0; }
+.ok { background: var(--felt-soft); } .ng { background: var(--warn-bg); }
+.box h3 { margin: 0; } .ok h3 { color: var(--felt); } .ng h3 { color: var(--aka); }
+.box ul { margin: 0; padding-left: 1.2em; }
+.tbl { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; font-size: 14px; }
+th, td { text-align: right; padding: 6px 8px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th:first-child, td:first-child { text-align: left; }
+th { font-size: 12px; color: var(--sub); font-weight: 500; }
+td.dim { color: var(--sub); }
+.bar { display: grid; grid-template-columns: 4.5em 1fr 7.5em; align-items: center; gap: 10px; font-size: 14px; }
+.bt { background: var(--felt-soft); border-radius: 4px; height: 14px; overflow: hidden; }
+.bt i { display: block; height: 100%; background: var(--felt); }
+.bar.red .bt i { background: var(--aka); }
+.bv { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.bv small { color: var(--sub); margin-left: 6px; font-family: var(--body); }
+.note { font-size: 13px; color: var(--sub); }
+.notes { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; }
+ol.steps { margin: 0; padding-left: 1.4em; display: grid; gap: 4px; }
+.back { font-size: 13px; margin: 0; } .back a { color: var(--felt); }
+td.plus b { color: var(--felt); } td.minus b { color: var(--aka); }
+td small { color: var(--sub); font-size: 12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+<p class="back"><a href="./">← 研究ノートの一覧</a></p>
+<header>
+  <div class="eyebrow">ザンリーグ 企業リーグのルール ・ 2026年10月21日</div>
+  <h1>ザンリーグ三麻シミュレーション 第2回 オリと押し引き</h1>
+  <p class="lead">AIにオリを覚えさせ、打ち方の違うAIを同じ卓に座らせて打ち比べました。どちらの打ち方がチップを多く持ち帰るかを、3,000半荘ずつで見ています。</p>
+</header>
+
+<section>
+  <h2>結論</h2>
+  <div class="kpis">
+    <div class="kpi"><b>+1.3</b><span>オリを入れると増えるチップ（1半荘あたり）</span></div>
+    <div class="kpi"><b>+1.1</b><span>高い1シャンテンは押すと増えるチップ（1半荘あたり）</span></div>
+  </div>
+  <ul class="notes">
+    <li>相手のリーチには、テンパイしていなければオリるほうが得でした。差はぶれの約3.6倍で、偶然では説明しにくい大きさです。</li>
+    <li>ただし、1シャンテンでもドラ・赤・華牌が合わせて4枚以上ある手は、押すほうが得でした。筒子・索子の5が全部赤で華牌もあるこのルールでは、手が高くなりやすく、押して和了ったときの得が大きいためと見ています。</li>
+  </ul>
+</section>
+
+<section>
+  <h2>どう打たせたか</h2>
+  <ul class="notes">
+    <li>ルールは第1回と同じく、ザンリーグの公式ルールのページと競技規定のとおりです。鳴きはまだ入れていません（全員門前）。</li>
+    <li>オリの決め方：相手がリーチしたら、テンパイしていない手は一番安全な牌から切ります。</li>
+    <li>安全な牌の見方：リーチした人の捨て牌（現物）と、リーチの後に誰かが切って通った牌は通ります。萬子（1m・9m）と字牌は、2〜8mが無いので待ちが単騎かシャボだけになり、場に見えている枚数が多いほど安全と見ます。筒子・索子は筋と、端の牌か真ん中の牌かで見ます。</li>
+    <li>国士無双は、あと2枚以内のときだけ狙わせました。第1回はいつも国士を見ていて、国士の和了が多すぎたためです。</li>
+    <li>打ち比べでは席の並びを半荘ごとに回し、起家の有利・不利をならしています。</li>
+  </ul>
+</section>
+
+<section>
+  <h2>打ち比べ1：オリありとオリなし</h2>
+  <p>オリありのAI 1人と、オリなし（第1回の打ち方）のAI 2人で 3,000半荘（23,171局）。</p>
+  <div class="tbl"><table><thead><tr><th>AI</th><th>席の数</th><th>チップ（1半荘）</th><th>1着</th><th>2着</th><th>3着</th></tr></thead><tbody><tr><td>オリあり</td><td>3,000</td><td class="plus"><b>+0.86</b> <small>±0.28</small></td><td class="dim">34.2%</td><td class="dim">38.0%</td><td class="dim">27.8%</td></tr><tr><td>オリなし</td><td>6,000</td><td class="minus"><b>-0.43</b> <small>±0.22</small></td><td class="dim">32.9%</td><td class="dim">31.0%</td><td class="dim">36.1%</td></tr></tbody></table></div>
+  <p class="note">±は平均のぶれ（標準誤差）。オリありは3着が減って2着が増えています。大きく負けない打ち方が、チップの差になっています。</p>
+</section>
+
+<section>
+  <h2>打ち比べ2：1シャンテンで押すか</h2>
+  <p>3人ともオリありで、1シャンテンのときに押す線だけを変えて 3,000半荘（24,128局）。テンパイしていれば3人とも押します。</p>
+  <div class="tbl"><table><thead><tr><th>AI</th><th>席の数</th><th>チップ（1半荘）</th><th>1着</th><th>2着</th><th>3着</th></tr></thead><tbody><tr><td>ドラ・赤・華が4枚以上なら押す</td><td>3,000</td><td class="plus"><b>+0.61</b> <small>±0.31</small></td><td class="dim">35.3%</td><td class="dim">31.1%</td><td class="dim">33.6%</td></tr><tr><td>6枚以上なら押す</td><td>3,000</td><td class="minus"><b>-0.12</b> <small>±0.30</small></td><td class="dim">33.2%</td><td class="dim">33.8%</td><td class="dim">33.0%</td></tr><tr><td>1シャンテンでは押さない</td><td>3,000</td><td class="minus"><b>-0.49</b> <small>±0.29</small></td><td class="dim">31.5%</td><td class="dim">35.0%</td><td class="dim">33.4%</td></tr></tbody></table></div>
+  <p class="note">押さない打ち方との差は +1.10チップ（ぶれの約2.6倍）。「高い手は1シャンテンでも押してよい」という結果です。</p>
+</section>
+
+<section>
+  <h2>オリで変わった数字</h2>
+  <p>同じ牌山（乱数の種が同じ）で、3人全員オリなし／3人全員オリありの1,000半荘を比べました。</p>
+  <div class="tbl"><table><thead><tr><th>数字</th><th>オリなし</th><th>オリあり</th></tr></thead><tbody><tr><td>1人1局あたりの和了率</td><td class="dim">32.8%</td><td><b>30.5%</b></td></tr><tr><td>1人1局あたりの放銃率</td><td class="dim">19.9%</td><td><b>13.3%</b></td></tr><tr><td>1人1局あたりのリーチ</td><td class="dim">56.0%</td><td><b>52.7%</b></td></tr><tr><td>1人1局あたりのオリ</td><td class="dim">—</td><td><b>48.3%</b></td></tr><tr><td>局がツモで終わる</td><td class="dim">37.5%</td><td><b>51.1%</b></td></tr><tr><td>局がロンで終わる</td><td class="dim">59.8%</td><td><b>39.8%</b></td></tr><tr><td>局が流局で終わる</td><td class="dim">2.7%</td><td><b>9.0%</b></td></tr><tr><td>和了の満貫以上</td><td class="dim">89.4%</td><td><b>91.7%</b></td></tr><tr><td>半荘がトビで終わる</td><td class="dim">36.1%</td><td><b>33.8%</b></td></tr><tr><td>国士無双の和了（局あたり）</td><td class="dim">70回（0.91%）</td><td><b>27回（0.34%）</b></td></tr></tbody></table></div>
+  <p class="note">放銃が減り、ツモと流局が増えます。トビで終わる半荘はあまり減りませんでした。このルールは手が高く、1回の放銃や親のツモで大きく削られるためと見ています。</p>
+</section>
+
+<section>
+  <h2>リーチの待ちの形（オリありの卓）</h2>
+  <p class="note">リーチした時点の待ちの形と、その時に見えていなかった待ち牌の枚数です。相手がオリるようになったので、第1回より実戦に近い数字です（リーチ100回以上の形だけ）。</p>
+  <div class="tbl"><table><thead><tr><th>待ち</th><th>リーチ</th><th>残り枚数</th><th>和了率</th><th>放銃率</th></tr></thead><tbody><tr><td>両面</td><td>3,114</td><td>6.5枚</td><td>70.4%</td><td>8.4%</td></tr><tr><td>単騎</td><td>2,861</td><td>2.9枚</td><td>45.9%</td><td>13.6%</td></tr><tr><td>嵌張</td><td>2,598</td><td>3.5枚</td><td>53.1%</td><td>14.2%</td></tr><tr><td>シャボ</td><td>2,118</td><td>3.2枚</td><td>54.9%</td><td>12.9%</td></tr><tr><td>辺張</td><td>1,145</td><td>3.5枚</td><td>54.1%</td><td>13.2%</td></tr><tr><td>多面</td><td>722</td><td>7.9枚</td><td>77.1%</td><td>6.0%</td></tr></tbody></table></div>
+</section>
+
+<section>
+  <h2>まだ入っていないもの</h2>
+  <ul class="notes">
+    <li>鳴き（ポン）・槓。</li>
+    <li>リーチかダマか、シャンテン戻し。今はテンパイしたらすぐリーチします。</li>
+    <li>点差や順位を見た押し引き（オーラスの着順争いなど）。</li>
+  </ul>
+  <p class="note">次の回では、リーチかダマかを打ち比べる予定です。</p>
+</section>
+</div>
+
+</body>
+</html>
