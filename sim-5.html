@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>ザンリーグ三麻シミュレーション 第5回 押し引きと放銃率</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* 卓のフェルトの緑を地の色に、赤5の朱を差し色に。縦1段の読み物、数字は表と横棒 */
+:root {
+  --bg: #f3f5f2; --paper: #ffffff; --fg: #1d2420; --sub: #5b665f; --line: #d9dfda;
+  --felt: #1f6b4f; --felt-soft: #e2efe8; --aka: #c2412d; --warn-bg: #fbeee9;
+  --display: "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+  --body: "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #121815; --paper: #1a221e; --fg: #e6ece8; --sub: #9aa8a0; --line: #2c3832;
+  --felt: #5fbf95; --felt-soft: #1f3329; --aka: #f07a63; --warn-bg: #3a221d; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #121815; --paper: #1a221e; --fg: #e6ece8; --sub: #9aa8a0; --line: #2c3832;
+  --felt: #5fbf95; --felt-soft: #1f3329; --aka: #f07a63; --warn-bg: #3a221d; color-scheme: dark; }
+body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 15px; line-height: 1.75;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 28px 56px; }
+.wrap { max-width: 760px; margin: 0 auto; display: grid; gap: 28px; }
+header h1 { font-family: var(--display); font-weight: 900; font-size: clamp(24px, 5vw, 34px); line-height: 1.3; margin: 4px 0 8px; text-wrap: balance; }
+.eyebrow { font-size: 12px; letter-spacing: .12em; color: var(--felt); font-weight: 700; }
+.lead { color: var(--sub); margin: 0; }
+section { background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 20px max(16px, 3vw); display: grid; gap: 12px; min-width: 0; }
+h2 { font-size: 19px; font-weight: 900; margin: 0; text-wrap: balance; }
+h3 { font-size: 15px; font-weight: 700; margin: 8px 0 0; }
+p { margin: 0; }
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.kpi { background: var(--felt-soft); border-radius: 8px; padding: 12px 14px; }
+.kpi b { display: block; font-family: var(--mono); font-size: 24px; color: var(--felt); font-variant-numeric: tabular-nums; }
+.kpi span { font-size: 13px; color: var(--sub); }
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 620px) { .split { grid-template-columns: 1fr; } }
+.box { border-radius: 8px; padding: 14px; display: grid; gap: 6px; min-width: 0; }
+.ok { background: var(--felt-soft); } .ng { background: var(--warn-bg); }
+.box h3 { margin: 0; } .ok h3 { color: var(--felt); } .ng h3 { color: var(--aka); }
+.box ul { margin: 0; padding-left: 1.2em; }
+.tbl { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; font-size: 14px; }
+th, td { text-align: right; padding: 6px 8px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th:first-child, td:first-child { text-align: left; }
+th { font-size: 12px; color: var(--sub); font-weight: 500; }
+td.dim { color: var(--sub); }
+.bar { display: grid; grid-template-columns: 4.5em 1fr 7.5em; align-items: center; gap: 10px; font-size: 14px; }
+.bt { background: var(--felt-soft); border-radius: 4px; height: 14px; overflow: hidden; }
+.bt i { display: block; height: 100%; background: var(--felt); }
+.bar.red .bt i { background: var(--aka); }
+.bv { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.bv small { color: var(--sub); margin-left: 6px; font-family: var(--body); }
+.note { font-size: 13px; color: var(--sub); }
+.notes { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; }
+ol.steps { margin: 0; padding-left: 1.4em; display: grid; gap: 4px; }
+.back { font-size: 13px; margin: 0; } .back a { color: var(--felt); }
+td.plus b { color: var(--felt); } td.minus b { color: var(--aka); }
+td small { color: var(--sub); font-size: 12px; }
+td.cell { text-align: center; font-family: var(--mono); font-size: 13px; }
+td.push { background: var(--felt-soft); color: var(--felt); font-weight: 700; }
+td.fold { background: var(--warn-bg); color: var(--aka); font-weight: 700; }
+@media (max-width: 620px) { td:first-child { white-space: normal; min-width: 6em; } th, td { padding: 6px 5px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+<p class="back"><a href="./">← 研究ノートの一覧</a></p>
+<header>
+  <div class="eyebrow">ザンリーグ 企業リーグのルール ・ 2026年10月22日</div>
+  <h1>ザンリーグ三麻シミュレーション 第5回 押し引きと放銃率</h1>
+  <p class="lead">相手のリーチを受けたとき、押すかオリるか。どの牌がどれだけ当たるか。シミュレーションの記録から数えた表と、その表で打たせたAIがどれだけ強くなったかをまとめました。</p>
+</header>
+
+<section>
+  <h2>結論</h2>
+  <div class="kpis">
+    <div class="kpi"><b>+1.8</b><span>2つの表でAIが強くなった分（1半荘あたりのチップ）</span></div>
+    <div class="kpi"><b>6,621,311</b><span>放銃率を数えた牌の数</span></div>
+  </div>
+  <ul class="notes">
+    <li>テンパイしたら、どの巡目・どの打点でも押すほうが得でした。</li>
+    <li>1シャンテンは、序盤ならどの手でも押し。中盤もドラ・赤・華が2枚以上あれば押し。このルールは手が高くなりやすく、押して和了ったときの得が大きいためと見ています。</li>
+    <li>3・7は筋が通っていても、無筋の1・9より当たりやすい（11.3% 対 8.6%）。三麻は嵌張・辺張・シャボの待ちが多いためと見ています。</li>
+  </ul>
+</section>
+
+<section>
+  <h2>1. 押すか、オリるか</h2>
+  <p>相手のリーチを受けた最初の判断で、AIを半々の確率で「最後まで押す」「最後までオリる」に振り分け、その局の結果（点数×0.344＋祝儀）を比べました（158,627局面）。振り分けはでたらめなので、同じ局面での押しとオリの差がそのまま出ます。0.344は、半荘の終わりの1,000点あたりのチップです。</p>
+  <div class="tbl"><table><thead><tr><th>自分の手</th><th>ドラ・赤・華</th><th>序盤<br><small>残り40枚〜</small></th><th>中盤<br><small>25〜39枚</small></th><th>終盤<br><small>10〜24枚</small></th></tr></thead><tbody><tr><td>テンパイ</td><td>0〜1枚</td><td class="cell push">+1.6</td><td class="cell push">+1.3</td><td class="cell">—</td></tr><tr><td></td><td>2〜3枚</td><td class="cell push">+2.5</td><td class="cell push">+2.2</td><td class="cell push">+1.2</td></tr><tr><td></td><td>4〜5枚</td><td class="cell push">+2.9</td><td class="cell push">+2.5</td><td class="cell push">+1.7</td></tr><tr><td></td><td>6枚〜</td><td class="cell push">+4.3</td><td class="cell push">+3.7</td><td class="cell">—</td></tr><tr><td>1シャンテン</td><td>0〜1枚</td><td class="cell push">+0.4</td><td class="cell push">+0.2</td><td class="cell ">-0.3</td></tr><tr><td></td><td>2〜3枚</td><td class="cell push">+0.7</td><td class="cell push">+0.3</td><td class="cell ">-0.0</td></tr><tr><td></td><td>4〜5枚</td><td class="cell push">+0.9</td><td class="cell push">+0.7</td><td class="cell ">+0.1</td></tr><tr><td></td><td>6枚〜</td><td class="cell push">+1.8</td><td class="cell push">+1.1</td><td class="cell ">+0.3</td></tr><tr><td>2シャンテン以上</td><td>0〜1枚</td><td class="cell fold">-0.3</td><td class="cell fold">-0.5</td><td class="cell">—</td></tr><tr><td></td><td>2〜3枚</td><td class="cell ">+0.1</td><td class="cell fold">-0.3</td><td class="cell ">-0.6</td></tr><tr><td></td><td>4〜5枚</td><td class="cell push">+0.3</td><td class="cell ">-0.1</td><td class="cell">—</td></tr><tr><td></td><td>6枚〜</td><td class="cell push">+1.0</td><td class="cell ">-0.0</td><td class="cell">—</td></tr></tbody></table></div>
+  <p class="note">数字は「押す − オリる」（その局の結果の差・チップ）。緑は押すほうが得、赤はオリるほうが得（差がぶれの2倍より大きい所だけ色を付けた）。—は局面が少ない所。全体では、テンパイは押す +0.49・オリる -1.77、1シャンテンは押す -1.59・オリる -2.10 でした。</p>
+</section>
+
+<section>
+  <h2>2. どの牌がどれだけ当たるか</h2>
+  <p>リーチを受けて牌を切るとき、手の中の牌がそれぞれリーチ者の当たり牌だった割合です（のべ6,621,311牌）。現物とリーチ後に通った牌は当たらないので除いています。</p>
+  <h3>字牌と萬子（見えている枚数。自分の手の分も含む）</h3>
+  <div class="tbl"><table><thead><tr><th>牌</th><th>1枚</th><th>2枚</th><th>3枚</th></tr></thead><tbody><tr><td>字牌</td><td>8.7%</td><td>6.0%</td><td>0.9%</td></tr><tr><td>萬子（1m・9m）</td><td>7.4%</td><td>4.5%</td><td>0.4%</td></tr></tbody></table></div>
+  <p class="note">萬子は2〜8が無いので、字牌と同じく待ちは単騎かシャボだけになります。</p>
+  <h3>筒子・索子の1・9／2・8／3・7（筋は片側だけ）</h3>
+  <div class="tbl"><table><thead><tr><th>牌</th><th>無筋</th><th>筋</th></tr></thead><tbody><tr><td>1・9</td><td>8.6%</td><td>4.4%</td></tr><tr><td>2・8</td><td>11.2%</td><td>7.5%</td></tr><tr><td>3・7</td><td>15.0%</td><td>11.3%</td></tr></tbody></table></div>
+  <p class="note">筋は、1なら4、9なら6、2・8なら5、3なら6、7なら4が、リーチ者の捨て牌かリーチ後に通った牌にあること。</p>
+  <h3>筒子・索子の4・6／5（筋は両側）</h3>
+  <div class="tbl"><table><thead><tr><th>牌</th><th>無筋</th><th>片筋</th><th>両筋</th></tr></thead><tbody><tr><td>4・6</td><td>14.1%</td><td>10.7%</td><td>6.8%</td></tr><tr><td>5</td><td>15.9%</td><td>14.2%</td><td>12.2%</td></tr></tbody></table></div>
+  <h3>リーチが早いか遅いか</h3>
+  <div class="tbl"><table><thead><tr><th>牌</th><th>6巡目までのリーチ</th><th>7巡目以降のリーチ</th></tr></thead><tbody><tr><td>5の無筋</td><td>14.1%</td><td>17.2%</td></tr><tr><td>3・7の筋</td><td>11.2%</td><td>11.3%</td></tr><tr><td>1・9の無筋</td><td>7.5%</td><td>9.5%</td></tr><tr><td>字牌（1枚見え）</td><td>6.8%</td><td>11.2%</td></tr></tbody></table></div>
+</section>
+
+<section>
+  <h2>3. この表でAIはどれだけ強くなったか</h2>
+  <p>表で押し引きするAIを、もとのAIと同じ卓に座らせて打ち比べました（席は半荘ごとに回す）。</p>
+  <h3>押し引きの表を使うと（6,000半荘）</h3>
+  <div class="tbl"><table><thead><tr><th>AI</th><th>チップ（1半荘）</th><th>和了率</th><th>放銃率</th></tr></thead><tbody><tr><td>表で押し引き</td><td class="plus"><b>+0.77</b> <small>±0.22</small></td><td>32.9%</td><td>17.0%</td></tr><tr><td>もとのAI</td><td class="minus"><b>-0.39</b> <small>±0.15</small></td><td>30.1%</td><td>13.5%</td></tr></tbody></table></div>
+  <p class="note">もとのAIは、ドラ・赤・華が4枚未満の1シャンテンでオリていて、オリすぎでした。放銃は増えますが、和了と祝儀がそれ以上に増えます。</p>
+  <h3>放銃率の表と回し打ちを足すと（6,000半荘）</h3>
+  <div class="tbl"><table><thead><tr><th>AI</th><th>チップ（1半荘）</th><th>和了率</th><th>放銃率</th></tr></thead><tbody><tr><td>放銃率の表＋回し打ち</td><td class="plus"><b>+0.44</b> <small>±0.21</small></td><td>31.6%</td><td>14.2%</td></tr><tr><td>押し引きの表だけ</td><td class="minus"><b>-0.22</b> <small>±0.15</small></td><td>31.4%</td><td>16.6%</td></tr></tbody></table></div>
+  <p class="note">オリるときは一番当たりにくい牌を、押すときもシャンテン数を保てる牌の中で一番当たりにくい牌を切ります。和了率はそのままで、放銃率が下がりました。</p>
+</section>
+
+<section>
+  <h2>4. 白ポッチが残っているリーチ</h2>
+  <p>リーチした時点で白ポッチがまだ見えていないと、リーチの価値が上がります（オリありのAIどうしの卓、リーチ104,917回。白ポッチを自分で持っているリーチは除く）。</p>
+  <div class="tbl"><table><thead><tr><th>リーチした巡目</th><th>白ポッチ</th><th>リーチ</th><th>和了率</th><th>その局の点数</th><th>その局の祝儀</th></tr></thead><tbody><tr><td>〜5巡</td><td>まだ見えていない</td><td>14,170</td><td>74.0%</td><td>+8,258</td><td>+0.88枚</td></tr><tr><td></td><td>見えている</td><td>2,878</td><td>70.8%</td><td>+7,364</td><td>+0.64枚</td></tr><tr><td>6〜9巡</td><td>まだ見えていない</td><td>28,964</td><td>64.1%</td><td>+6,503</td><td>+0.73枚</td></tr><tr><td></td><td>見えている</td><td>14,532</td><td>60.1%</td><td>+5,341</td><td>+0.49枚</td></tr><tr><td>10巡〜</td><td>まだ見えていない</td><td>21,574</td><td>50.7%</td><td>+4,596</td><td>+0.56枚</td></tr><tr><td></td><td>見えている</td><td>22,799</td><td>46.0%</td><td>+3,703</td><td>+0.39枚</td></tr></tbody></table></div>
+  <p class="note">点数はリーチ棒の1,000点を引いた後。白ポッチは引けば必ず和了れ、待ちの中で一番高い牌で和了れます。</p>
+</section>
+
+<section>
+  <h2>この数字の前提</h2>
+  <ul class="notes">
+    <li>どの数字も、AIどうしの卓の数字です。相手はリーチにはオリ、鳴き・ダマはしない打ち方です。実際の企業リーグの打ち手相手では、放銃率や押し引きの線は多少ずれます。</li>
+    <li>次の回では、鳴き（ポン）を調べる予定です。</li>
+  </ul>
+</section>
+</div>
+
+</body>
+</html>
