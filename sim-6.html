@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>ザンリーグ三麻シミュレーション 第6回 鳴きと手作り</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* 卓のフェルトの緑を地の色に、赤5の朱を差し色に。縦1段の読み物、数字は表と横棒 */
+:root {
+  --bg: #f3f5f2; --paper: #ffffff; --fg: #1d2420; --sub: #5b665f; --line: #d9dfda;
+  --felt: #1f6b4f; --felt-soft: #e2efe8; --aka: #c2412d; --warn-bg: #fbeee9;
+  --display: "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+  --body: "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #121815; --paper: #1a221e; --fg: #e6ece8; --sub: #9aa8a0; --line: #2c3832;
+  --felt: #5fbf95; --felt-soft: #1f3329; --aka: #f07a63; --warn-bg: #3a221d; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #121815; --paper: #1a221e; --fg: #e6ece8; --sub: #9aa8a0; --line: #2c3832;
+  --felt: #5fbf95; --felt-soft: #1f3329; --aka: #f07a63; --warn-bg: #3a221d; color-scheme: dark; }
+body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 15px; line-height: 1.75;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 28px 56px; }
+.wrap { max-width: 760px; margin: 0 auto; display: grid; gap: 28px; }
+header h1 { font-family: var(--display); font-weight: 900; font-size: clamp(24px, 5vw, 34px); line-height: 1.3; margin: 4px 0 8px; text-wrap: balance; }
+.eyebrow { font-size: 12px; letter-spacing: .12em; color: var(--felt); font-weight: 700; }
+.lead { color: var(--sub); margin: 0; }
+section { background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 20px max(16px, 3vw); display: grid; gap: 12px; min-width: 0; }
+h2 { font-size: 19px; font-weight: 900; margin: 0; text-wrap: balance; }
+h3 { font-size: 15px; font-weight: 700; margin: 8px 0 0; }
+p { margin: 0; }
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.kpi { background: var(--felt-soft); border-radius: 8px; padding: 12px 14px; }
+.kpi b { display: block; font-family: var(--mono); font-size: 24px; color: var(--felt); font-variant-numeric: tabular-nums; }
+.kpi span { font-size: 13px; color: var(--sub); }
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 620px) { .split { grid-template-columns: 1fr; } }
+.box { border-radius: 8px; padding: 14px; display: grid; gap: 6px; min-width: 0; }
+.ok { background: var(--felt-soft); } .ng { background: var(--warn-bg); }
+.box h3 { margin: 0; } .ok h3 { color: var(--felt); } .ng h3 { color: var(--aka); }
+.box ul { margin: 0; padding-left: 1.2em; }
+.tbl { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; font-size: 14px; }
+th, td { text-align: right; padding: 6px 8px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th:first-child, td:first-child { text-align: left; }
+th { font-size: 12px; color: var(--sub); font-weight: 500; }
+td.dim { color: var(--sub); }
+.bar { display: grid; grid-template-columns: 4.5em 1fr 7.5em; align-items: center; gap: 10px; font-size: 14px; }
+.bt { background: var(--felt-soft); border-radius: 4px; height: 14px; overflow: hidden; }
+.bt i { display: block; height: 100%; background: var(--felt); }
+.bar.red .bt i { background: var(--aka); }
+.bv { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.bv small { color: var(--sub); margin-left: 6px; font-family: var(--body); }
+.note { font-size: 13px; color: var(--sub); }
+.notes { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; }
+ol.steps { margin: 0; padding-left: 1.4em; display: grid; gap: 4px; }
+.back { font-size: 13px; margin: 0; } .back a { color: var(--felt); }
+td.plus b { color: var(--felt); } td.minus b { color: var(--aka); }
+td small { color: var(--sub); font-size: 12px; }
+@media (max-width: 620px) { td:first-child { white-space: normal; min-width: 6em; } th, td { padding: 6px 5px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+<p class="back"><a href="./">← 研究ノートの一覧</a></p>
+<header>
+  <div class="eyebrow">ザンリーグ 企業リーグのルール ・ 2026年10月22日</div>
+  <h1>ザンリーグ三麻シミュレーション 第6回 鳴きと手作り</h1>
+  <p class="lead">どの牌をポンするか。字牌をどれから切るか。両面と嵌張のどちらを残すか。赤5の待ちと上がりやすい待ちのどちらがよいか。同じ牌山で1つの判断だけを変えて打ち直す方法と、打ち比べの記録で数えました。</p>
+</header>
+
+<section>
+  <h2>結論</h2>
+  <div class="kpis">
+    <div class="kpi"><b>+1.4</b><span>役牌のポンでAIが強くなった分（1半荘あたりのチップ）</span></div>
+    <div class="kpi"><b>-1.4</b><span>喰いタンのポン1回の損得（チップ）</span></div>
+  </div>
+  <ul class="notes">
+    <li>役牌は、ポンしてシャンテン数が進むならポンが得。喰いタンとホンイツのポンは、得になりませんでした。</li>
+    <li>字牌をどれから切っても、最終チップはほとんど変わりません。</li>
+    <li>両面と嵌張なら両面。嵌張が赤5の待ちでも、差が縮まるだけでひっくり返りませんでした。</li>
+    <li>2234（2-5待ち）と7899（6-9待ち）は、5で和了った1翻で点数の区切りをまたぐときだけ2234。8翻・11翻のように1翻増えても点数が変わらないときは、和了りやすい7899が得です。</li>
+  </ul>
+</section>
+
+<section>
+  <h2>1. 鳴き（ポン）</h2>
+  <p>ポンするAIを、ポンしないAIと同じ卓に座らせて打ち比べました（席は半荘ごとに回す）。このルールはチーが無く、鳴くとリーチできないので、一発・裏ドラ・白ポッチの祝儀を手放します。</p>
+  <h3>役牌のポン（6,000半荘）</h3>
+<div class="tbl"><table><thead><tr><th>AI</th><th>チップ（1半荘）</th></tr></thead><tbody><tr><td>役牌だけポン（ポンでシャンテン数が進むとき）</td><td class="plus"><b>+0.91</b> <small>±0.21</small></td></tr><tr><td>鳴かないAI（第5回の版）</td><td class="minus"><b>-0.46</b> <small>±0.15</small></td></tr></tbody></table></div>
+<h3>喰いタンのポンを足す（6,000半荘）</h3>
+<div class="tbl"><table><thead><tr><th>AI</th><th>チップ（1半荘）</th></tr></thead><tbody><tr><td>役牌＋喰いタンのポン</td><td class=""><b>+0.11</b> <small>±0.20</small></td></tr><tr><td>役牌だけポン</td><td class=""><b>-0.06</b> <small>±0.14</small></td></tr></tbody></table></div>
+<h3>ホンイツのポンを足す（6,000半荘）</h3>
+<div class="tbl"><table><thead><tr><th>AI</th><th>チップ（1半荘）</th></tr></thead><tbody><tr><td>役牌＋ホンイツのポン</td><td class=""><b>-0.39</b> <small>±0.20</small></td></tr><tr><td>役牌だけポン</td><td class=""><b>+0.19</b> <small>±0.14</small></td></tr></tbody></table></div>
+
+  <p class="note">役牌のポンは和了率が5ポイント以上上がり、鳴いて和了った手も平均4翻を超えました（赤5・華牌・ドラで高くなりやすい）。喰いタンのポンは差がぶれの中、ホンイツのポンは損でした。</p>
+  <h3>喰いタンのポンは、どの局面なら得か（18,457局面）</h3>
+  <p>喰いタンでポンできる局面で、その1回だけポンして、同じ牌山で半荘の最後まで打ち直した最終チップの差です。相手の親を早く流す・自分の親を続けるといった先の局への効き目も、この差に入っています。</p>
+  <div class="tbl"><table><thead><tr><th>局面</th><th>局面数</th><th>ポンした − しない</th></tr></thead><tbody><tr><td>全部</td><td>18,457</td><td class="minus"><b>-1.37</b> <small>±0.10</small></td></tr><tr><td>東場</td><td>10,466</td><td class="minus"><b>-1.33</b> <small>±0.14</small></td></tr><tr><td>オーラスでトップ目</td><td>678</td><td class="minus"><b>-1.28</b> <small>±0.32</small></td></tr><tr><td>オーラスでラス目</td><td>727</td><td class="minus"><b>-1.74</b> <small>±0.30</small></td></tr><tr><td>相手の親が連荘中</td><td>4,351</td><td class="minus"><b>-1.18</b> <small>±0.20</small></td></tr><tr><td>相手がリーチしている</td><td>7,622</td><td class="minus"><b>-1.02</b> <small>±0.14</small></td></tr><tr><td>自分が親</td><td>5,953</td><td class="minus"><b>-1.74</b> <small>±0.18</small></td></tr><tr><td>序盤（残りのツモ40枚以上）</td><td>8,851</td><td class="minus"><b>-1.60</b> <small>±0.14</small></td></tr><tr><td>終盤（残りのツモ24枚以下）</td><td>2,813</td><td class="minus"><b>-0.69</b> <small>±0.24</small></td></tr></tbody></table></div>
+  <p class="note">どの局面でも損でした。損が小さいのは終盤と、相手がリーチしているとき。ただし今のAIは、鳴いたあとの押し引きを門前の手の表のまま打っているので、損は大きめに出ている見込みです。鳴いたあとの打ち方を直して測り直します。</p>
+</section>
+
+<section>
+  <h2>2. 字牌をどれから切るか（12,000局面）</h2>
+  <p>牌効率で差の無い字牌が2枚以上ある局面で、切る字牌だけを替えて打ち直しました。数字は、その字牌を先に切ったときの最終チップの差（プラスなら先に切るほうが得）です。</p>
+  <div class="tbl"><table><thead><tr><th>字牌</th><th>場に</th><th>局面数</th><th>先に切ったときの差</th></tr></thead><tbody><tr><td>自分のダブ風</td><td>場に見えていない</td><td>681</td><td class="plus"><b>+0.79</b> <small>±0.35</small></td></tr><tr><td></td><td>1枚以上見えている</td><td>151</td><td class=""><b>+0.19</b> <small>±0.40</small></td></tr><tr><td>自分の役牌（三元牌・北・自風・場風）</td><td>場に見えていない</td><td>12,917</td><td class=""><b>-0.01</b> <small>±0.08</small></td></tr><tr><td></td><td>1枚以上見えている</td><td>2,527</td><td class=""><b>-0.04</b> <small>±0.10</small></td></tr><tr><td>客風</td><td>場に見えていない</td><td>2,736</td><td class=""><b>-0.12</b> <small>±0.16</small></td></tr><tr><td></td><td>1枚以上見えている</td><td>655</td><td class=""><b>+0.07</b> <small>±0.18</small></td></tr><tr><td>萬子の1・9</td><td>場に見えていない</td><td>3,393</td><td class=""><b>-0.01</b> <small>±0.13</small></td></tr><tr><td></td><td>1枚以上見えている</td><td>940</td><td class=""><b>-0.01</b> <small>±0.14</small></td></tr></tbody></table></div>
+  <p class="note">どちらを切っても最終チップが同じだった局面が73%。差はほとんどがぶれの中で、字牌の切り順で成績はほとんど変わりません。ぶれの2倍を超えたのは、まだ見えていない自分のダブ風を先に切るほうが得、という向きの1つだけでした（8つの数のうち1つなので、偶然の見込みもあります）。</p>
+</section>
+
+<section>
+  <h2>3. 両面と嵌張、どちらを残すか（9,763局面）</h2>
+  <p>両面と嵌張のどちらを崩してもシャンテン数が変わらない局面（門前・相手のリーチなし）で、「両面を残す」「嵌張を残す」を同じ牌山で打ち直しました。数字は嵌張を残した − 両面を残した（プラスなら嵌張が得）。</p>
+  <div class="tbl"><table><thead><tr><th>待ち</th><th>局面数</th><th>嵌張を残した − 両面を残した</th></tr></thead><tbody><tr><td>どちらの待ちにも5・ドラが無い</td><td>2,575</td><td class="minus"><b>-0.46</b> <small>±0.21</small></td></tr><tr><td>両面の待ちにだけ5かドラがある</td><td>1,564</td><td class=""><b>-0.23</b> <small>±0.26</small></td></tr><tr><td>嵌張が5待ち（またはドラ待ち）、両面に無い</td><td>3,197</td><td class=""><b>-0.15</b> <small>±0.18</small></td></tr><tr><td>嵌張が5待ち、両面にも5かドラがある</td><td>1,783</td><td class=""><b>-0.22</b> <small>±0.24</small></td></tr></tbody></table></div>
+  <h3>嵌張が5待ち・両面に5もドラも無いとき、受け入れの差で分けると</h3>
+  <div class="tbl"><table><thead><tr><th>見えていない枚数の差（両面 − 嵌張）</th><th>局面数</th><th>嵌張を残した − 両面を残した</th></tr></thead><tbody><tr><td>2枚</td><td>206</td><td class=""><b>+0.41</b> <small>±0.56</small></td></tr><tr><td>3枚</td><td>599</td><td class=""><b>+0.22</b> <small>±0.41</small></td></tr><tr><td>4枚</td><td>2,182</td><td class=""><b>-0.21</b> <small>±0.22</small></td></tr><tr><td>5枚</td><td>134</td><td class=""><b>+0.08</b> <small>±0.67</small></td></tr></tbody></table></div>
+  <p class="note">赤5の嵌張は、両面との差を縮めますが、ひっくり返すところまでは届きません。受け入れの差で分けても、ぶれより大きな境目は見えませんでした。拾えた局面の63%が3シャンテン以上の序盤で、どちらを残しても最終チップが同じ局面が55%あります。</p>
+</section>
+
+<section>
+  <h2>4. 2234と7899（2-5待ちと6-9待ち）</h2>
+  <p>打ち比べの記録から、リーチしたテンパイを待ちごとに数えました。雀頭が待ち牌の形（2234・7899 のように、待ち牌を自分で2枚持っている形）だけです。</p>
+  <div class="tbl"><table><thead><tr><th>待ち</th><th>リーチ</th><th>和了率</th><th>ロン</th><th>ツモ</th></tr></thead><tbody><tr><td>1-4</td><td>1,592</td><td>63.6%</td><td>35.3%</td><td>28.3%</td></tr><tr><td>2-5</td><td>2,043</td><td>60.9%</td><td>29.7%</td><td>31.2%</td></tr><tr><td>3-6</td><td>2,618</td><td>58.7%</td><td>26.4%</td><td>32.2%</td></tr><tr><td>4-7</td><td>2,811</td><td>60.1%</td><td>26.2%</td><td>33.9%</td></tr><tr><td>5-8</td><td>2,192</td><td>59.5%</td><td>27.1%</td><td>32.5%</td></tr><tr><td>6-9</td><td>1,827</td><td>66.0%</td><td>35.9%</td><td>30.0%</td></tr></tbody></table></div>
+  <p class="note">2-5待ちは60.9%、6-9待ちは66.0%。差はほぼロンの差です。筒子・索子の5は全部赤なので相手が切らず、1・9は出やすいためと見ています。2-5待ちで和了ったうち、5で和了ったのは41%でした。</p>
+  <h3>元の翻数ごとの損得（リーチ1回あたりのチップ）</h3>
+  <p>元の翻数は、5で和了ったときの赤の1翻と裏ドラを除いた翻数です。和了率と、裏ドラの乗る枚数（0枚 61.7%・1枚 28.1%・2枚 7.2%）から、子の点数×0.344/1000＋裏ドラの祝儀で出しました。</p>
+  <div class="tbl"><table><thead><tr><th>元の翻数</th><th>5で1翻増えると（子のロン）</th><th>2234 − 7899</th></tr></thead><tbody><tr><td>1翻</td><td><small>1,000→2,000</small></td><td class="plus"><b>+0.07</b></td></tr><tr><td>2翻</td><td><small>2,000→4,000</small></td><td class="plus"><b>+0.13</b></td></tr><tr><td>3翻</td><td><small>4,000→8,000</small></td><td class="plus"><b>+0.11</b></td></tr><tr><td>4翻</td><td><small>満貫のまま</small></td><td class="minus"><b>-0.07</b></td></tr><tr><td>5翻</td><td><small>満貫→跳満</small></td><td class=""><b>+0.04</b></td></tr><tr><td>6翻</td><td><small>跳満のまま</small></td><td class="minus"><b>-0.15</b></td></tr><tr><td>7翻</td><td><small>跳満→倍満</small></td><td class=""><b>-0.03</b></td></tr><tr><td>8翻</td><td><small>倍満のまま</small></td><td class="minus"><b>-0.26</b></td></tr><tr><td>9翻</td><td><small>倍満のまま</small></td><td class="minus"><b>-0.11</b></td></tr><tr><td>10翻</td><td><small>倍満→三倍満</small></td><td class="plus"><b>+0.11</b></td></tr><tr><td>11翻</td><td><small>三倍満のまま</small></td><td class="minus"><b>-0.27</b></td></tr><tr><td>12翻</td><td><small>三倍満のまま</small></td><td class="minus"><b>-0.07</b></td></tr></tbody></table></div>
+  <p class="note">2234が得なのは、1翻で点数の区切りをまたぐとき（1〜3翻・5翻・10翻）だけです。8翻・11翻は7899が一番得（-0.26・-0.27）。区切りをまたぐ7翻でも、和了率の差でほぼ互角になります。差のぶれは8翻で約±0.1です。</p>
+</section>
+
+<section>
+  <h2>この数字の前提</h2>
+  <ul class="notes">
+    <li>どの数字も、AIどうしの卓の数字です。相手は役牌だけポンし、リーチを受けたら押し引きの表で打つAIです。実際の企業リーグの打ち手相手では、5の出やすさや鳴きの効き目は多少ずれます。</li>
+    <li>打ち直しは、選んだ1打のあとはAIがふだんどおり打ちます。残した嵌張をあとで払う局面も入っています。</li>
+    <li>2234と7899の損得は、子の点数表で出しました。親と本場は入れていません。</li>
+  </ul>
+</section>
+</div>
+
+</body>
+</html>
