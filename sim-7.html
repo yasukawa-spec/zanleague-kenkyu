@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>ザンリーグ三麻シミュレーション 第7回 槓と、鳴いたあとの打ち方</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* 卓のフェルトの緑を地の色に、赤5の朱を差し色に。縦1段の読み物、数字は表と横棒 */
+:root {
+  --bg: #f3f5f2; --paper: #ffffff; --fg: #1d2420; --sub: #5b665f; --line: #d9dfda;
+  --felt: #1f6b4f; --felt-soft: #e2efe8; --aka: #c2412d; --warn-bg: #fbeee9;
+  --display: "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+  --body: "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #121815; --paper: #1a221e; --fg: #e6ece8; --sub: #9aa8a0; --line: #2c3832;
+  --felt: #5fbf95; --felt-soft: #1f3329; --aka: #f07a63; --warn-bg: #3a221d; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #121815; --paper: #1a221e; --fg: #e6ece8; --sub: #9aa8a0; --line: #2c3832;
+  --felt: #5fbf95; --felt-soft: #1f3329; --aka: #f07a63; --warn-bg: #3a221d; color-scheme: dark; }
+body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 15px; line-height: 1.75;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 28px 56px; }
+.wrap { max-width: 760px; margin: 0 auto; display: grid; gap: 28px; }
+header h1 { font-family: var(--display); font-weight: 900; font-size: clamp(24px, 5vw, 34px); line-height: 1.3; margin: 4px 0 8px; text-wrap: balance; }
+.eyebrow { font-size: 12px; letter-spacing: .12em; color: var(--felt); font-weight: 700; }
+.lead { color: var(--sub); margin: 0; }
+section { background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 20px max(16px, 3vw); display: grid; gap: 12px; min-width: 0; }
+h2 { font-size: 19px; font-weight: 900; margin: 0; text-wrap: balance; }
+h3 { font-size: 15px; font-weight: 700; margin: 8px 0 0; }
+p { margin: 0; }
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.kpi { background: var(--felt-soft); border-radius: 8px; padding: 12px 14px; }
+.kpi b { display: block; font-family: var(--mono); font-size: 24px; color: var(--felt); font-variant-numeric: tabular-nums; }
+.kpi span { font-size: 13px; color: var(--sub); }
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 620px) { .split { grid-template-columns: 1fr; } }
+.box { border-radius: 8px; padding: 14px; display: grid; gap: 6px; min-width: 0; }
+.ok { background: var(--felt-soft); } .ng { background: var(--warn-bg); }
+.box h3 { margin: 0; } .ok h3 { color: var(--felt); } .ng h3 { color: var(--aka); }
+.box ul { margin: 0; padding-left: 1.2em; }
+.tbl { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; font-size: 14px; }
+th, td { text-align: right; padding: 6px 8px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th:first-child, td:first-child { text-align: left; }
+th { font-size: 12px; color: var(--sub); font-weight: 500; }
+td.dim { color: var(--sub); }
+.bar { display: grid; grid-template-columns: 4.5em 1fr 7.5em; align-items: center; gap: 10px; font-size: 14px; }
+.bt { background: var(--felt-soft); border-radius: 4px; height: 14px; overflow: hidden; }
+.bt i { display: block; height: 100%; background: var(--felt); }
+.bar.red .bt i { background: var(--aka); }
+.bv { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.bv small { color: var(--sub); margin-left: 6px; font-family: var(--body); }
+.note { font-size: 13px; color: var(--sub); }
+.notes { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; }
+ol.steps { margin: 0; padding-left: 1.4em; display: grid; gap: 4px; }
+.back { font-size: 13px; margin: 0; } .back a { color: var(--felt); }
+td.plus b { color: var(--felt); } td.minus b { color: var(--aka); }
+td small { color: var(--sub); font-size: 12px; }
+@media (max-width: 620px) { td:first-child { white-space: normal; min-width: 6em; } th, td { padding: 6px 5px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+<p class="back"><a href="./">← 研究ノートの一覧</a></p>
+<header>
+  <div class="eyebrow">ザンリーグ 企業リーグのルール ・ 2026年10月22日</div>
+  <h1>ザンリーグ三麻シミュレーション 第7回 槓と、鳴いたあとの打ち方</h1>
+  <p class="lead">シミュレータに槓（暗槓・加槓・明槓、槓ドラ・槓裏、嶺上開花、搶槓）を入れ、どの槓が得かを、同じ牌山で「その1回だけ槓する／しない」を打ち直して測りました。あわせて、鳴いたあとの打ち方を直したら喰いタンの損が減るかも確かめました。</p>
+</header>
+
+<section>
+  <h2>結論</h2>
+  <div class="kpis">
+    <div class="kpi"><b>+1.8</b><span>リーチ後の暗槓1回の得（チップ）</span></div>
+    <div class="kpi"><b>-1.9</b><span>門前の手の明槓1回の損（チップ）</span></div>
+  </div>
+  <ul class="notes">
+    <li>リーチ後の暗槓は、待ちが愚形でも、相手がリーチしていても得。槓ドラと槓裏が自分の手に乗る見込みが増えるためと見ています。</li>
+    <li>リーチ前の暗槓は、手の形が崩れなければ損得なし（テンパイや役牌の暗槓は得の向き）。4枚のうち1枚を順子に使っていて崩れるなら損で、リーチを受けているときに一番大きく損します。</li>
+    <li>加槓は、リーチを受けていなければ得の向き、受けていれば損の向き。</li>
+    <li>明槓は損。門前の手はリーチを手放すので大きく損します。役牌でも損でした。</li>
+    <li>得だった槓だけするAIは、槓しないAIより1半荘あたり +0.40 ±0.18 チップ強くなりました（2回の打ち比べを合わせて）。いつも槓すると -1.30 の損です。</li>
+    <li>鳴いたあとの打ち方を直しても、AIは強くならず、喰いタンのポンも損のままでした。</li>
+  </ul>
+</section>
+
+<section>
+  <h2>1. どの槓が得か（20,305局面）</h2>
+  <p>3人とも「役牌だけポンし、槓はしない」AIで打ち、槓できる局面ごとに、その1回だけ槓して半荘の最後まで打ち直しました。数字はその人の最終チップの差（槓した − しない）。「手の形が崩れる」は、槓すると嶺上牌を取る前のシャンテン数が悪くなる局面です。</p>
+  <div class="tbl"><table><thead><tr><th>局面</th><th>局面数</th><th>槓した − しない</th></tr></thead><tbody><tr><td>リーチ後の暗槓</td><td>842</td><td class="plus"><b>+1.76</b> <small>±0.31</small></td></tr><tr><td>　待ちが良形（両面・多面）</td><td>262</td><td class="plus"><b>+2.18</b> <small>±0.58</small></td></tr><tr><td>　待ちが愚形（嵌張・辺張・シャボ・単騎）</td><td>580</td><td class="plus"><b>+1.57</b> <small>±0.37</small></td></tr><tr><td>　相手もリーチしている</td><td>405</td><td class="plus"><b>+1.89</b> <small>±0.48</small></td></tr><tr><td>リーチ前の暗槓・手の形が崩れない</td><td>4,770</td><td class=""><b>+0.04</b> <small>±0.17</small></td></tr><tr><td>　テンパイ</td><td>370</td><td class=""><b>+1.05</b> <small>±0.55</small></td></tr><tr><td>　役牌の暗槓</td><td>808</td><td class="plus"><b>+1.09</b> <small>±0.41</small></td></tr><tr><td>リーチ前の暗槓・手の形が崩れる（相手のリーチなし）</td><td>4,308</td><td class="minus"><b>-0.74</b> <small>±0.19</small></td></tr><tr><td>リーチ前の暗槓・手の形が崩れる（相手のリーチあり）</td><td>2,740</td><td class="minus"><b>-1.61</b> <small>±0.20</small></td></tr><tr><td>加槓・相手がリーチしていない</td><td>684</td><td class=""><b>+0.50</b> <small>±0.29</small></td></tr><tr><td>加槓・相手がリーチしている</td><td>682</td><td class=""><b>-0.33</b> <small>±0.27</small></td></tr><tr><td>明槓・門前の手</td><td>5,637</td><td class="minus"><b>-1.90</b> <small>±0.18</small></td></tr><tr><td>明槓・役牌</td><td>1,989</td><td class="minus"><b>-0.62</b> <small>±0.29</small></td></tr><tr><td>明槓・すでに鳴いている手</td><td>642</td><td class=""><b>-0.55</b> <small>±0.44</small></td></tr></tbody></table></div>
+  <h3>時期で分けると</h3>
+  <div class="tbl"><table><thead><tr><th>時期</th><th>リーチ後の暗槓</th><th>リーチ前の暗槓（形が崩れない）</th></tr></thead><tbody><tr><td>序盤（残りのツモ40枚以上）</td><td class=""><b>+1.04</b> <small>±0.55</small></td><td class=""><b>-0.05</b> <small>±0.25</small></td></tr><tr><td>中盤（25〜39枚）</td><td class="plus"><b>+2.25</b> <small>±0.50</small></td><td class=""><b>+0.28</b> <small>±0.29</small></td></tr><tr><td>終盤（24枚以下）</td><td class="plus"><b>+1.44</b> <small>±0.53</small></td><td class=""><b>-0.16</b> <small>±0.39</small></td></tr></tbody></table></div>
+  <p class="note">緑は得、赤は損（差がぶれの2倍より大きい所だけ色を付けた）。</p>
+</section>
+
+<section>
+  <h2>2. 槓の決め方を変えたAIの打ち比べ</h2>
+  <p>「得だった槓だけする」AIは、リーチ後の暗槓はいつも、リーチ前の暗槓はシャンテン数が悪くならないときだけ、加槓は相手がリーチしていないときだけ槓し、明槓はしません。槓しないAI 2人と同じ卓で打ち比べました（席は半荘ごとに回す）。</p>
+  <div class="tbl"><table><thead><tr><th>AI</th><th>半荘</th><th>そのAI</th><th>槓しないAI</th><th>差</th></tr></thead><tbody><tr><td>いつも槓する</td><td>6,000</td><td class="minus"><b>-0.87</b> <small>±0.20</small></td><td class="plus"><b>+0.43</b> <small>±0.15</small></td><td class="minus"><b>-1.30</b> <small>±0.25</small></td></tr><tr><td>得だった槓だけする（1回目）</td><td>6,000</td><td class=""><b>+0.18</b> <small>±0.20</small></td><td class=""><b>-0.09</b> <small>±0.14</small></td><td class=""><b>+0.27</b> <small>±0.25</small></td></tr><tr><td>得だった槓だけする（2回目）</td><td>6,000</td><td class=""><b>+0.35</b> <small>±0.21</small></td><td class=""><b>-0.17</b> <small>±0.14</small></td><td class="plus"><b>+0.52</b> <small>±0.25</small></td></tr></tbody></table></div>
+  <p class="note">数字は1半荘あたりのチップ。得だった槓だけするAIの差は、2回を合わせて +0.40 ±0.18 でした。</p>
+</section>
+
+<section>
+  <h2>3. 鳴いたあとの打ち方を直すと</h2>
+  <p>今までのAIは、鳴いた手でも門前の手と同じ押し引きの表を使い、相手のリーチを受けると喰いタンの形を崩して押していました。押すときも役のある待ちと受け入れの多い形を保ち、その中で一番当たりにくい牌を切るように直して打ち比べました。</p>
+  <div class="tbl"><table><thead><tr><th>打ち比べ</th><th>直したAI − 今のAI</th></tr></thead><tbody><tr><td>1回目（6,000半荘）</td><td class=""><b>+0.41</b> <small>±0.25</small></td></tr><tr><td>2回目（6,000半荘）</td><td class=""><b>-0.46</b> <small>±0.25</small></td></tr></tbody></table></div>
+  <p class="note">2回で向きが逆になり、合わせると差はありません。鳴いた手専用の押し引きの表（30,680局面から作った）を足しても、差は出ませんでした。直した打ち方で喰いタンのポン1回を打ち直すと -1.46 ±0.23（3,103局面）で、第6回の −1.37 と変わりません。喰いタンの損は打ち方の粗さではなく、鳴くとリーチ（一発・裏ドラ・白ポッチの祝儀）を手放すことから来ていると見ています。</p>
+</section>
+
+<section>
+  <h2>4. 槓はどれくらい起きるか</h2>
+  <p>得だった槓だけするAIの打ち比べ（12,000半荘・96,324局）で数えました。槓するのは卓の3人のうち1人だけです。</p>
+  <div class="tbl"><table><thead><tr><th>数えたもの</th><th>数</th></tr></thead><tbody>
+    <tr><td>槓の回数</td><td>3,638回（暗槓 2,967・加槓 671）＝1半荘あたり 0.30回</td></tr>
+    <tr><td>嶺上開花</td><td>100回（槓 36回に1回）</td></tr>
+    <tr><td>搶槓</td><td>0回</td></tr>
+    <tr><td>槓した局の和了率</td><td>40.1%（AI全体の1局あたりの和了率は 32.1%）</td></tr>
+    <tr><td>和了の平均翻数</td><td>槓した人 6.61翻・槓していない人 5.86翻</td></tr>
+  </tbody></table></div>
+  <p class="note">槓した局は、和了率も打点も高くなります。ただ、槓できる手はもともと刻子のある進んだ手なので、この差がそのまま槓の効き目ではありません。槓の効き目は1と2の打ち直し・打ち比べの数字で見てください。</p>
+</section>
+
+<section>
+  <h2>この数字の前提</h2>
+  <ul class="notes">
+    <li>どの数字も、AIどうしの卓の数字です。相手は役牌だけポンし、リーチを受けたら押し引きの表で打つAIです。</li>
+    <li>打ち直しは、槓した1回のあとはAIがふだんどおり打ちます。</li>
+    <li>槓ドラは槓子を見せた時点で増え、1局に槓は4つまで、海底牌とその1つ前を引いた人は槓できない、リーチ後の暗槓は待ちが変わらないときだけ（競技規定 第6・9・28・31条）。</li>
+  </ul>
+</section>
+</div>
+
+</body>
+</html>
