@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>ザンリーグ三麻シミュレーション 第8回 高い手のダマかリーチか・企業リーグのチームの方針</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* 卓のフェルトの緑を地の色に、赤5の朱を差し色に。縦1段の読み物、数字は表と横棒 */
+:root {
+  --bg: #f3f5f2; --paper: #ffffff; --fg: #1d2420; --sub: #5b665f; --line: #d9dfda;
+  --felt: #1f6b4f; --felt-soft: #e2efe8; --aka: #c2412d; --warn-bg: #fbeee9;
+  --display: "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+  --body: "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #121815; --paper: #1a221e; --fg: #e6ece8; --sub: #9aa8a0; --line: #2c3832;
+  --felt: #5fbf95; --felt-soft: #1f3329; --aka: #f07a63; --warn-bg: #3a221d; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #121815; --paper: #1a221e; --fg: #e6ece8; --sub: #9aa8a0; --line: #2c3832;
+  --felt: #5fbf95; --felt-soft: #1f3329; --aka: #f07a63; --warn-bg: #3a221d; color-scheme: dark; }
+body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 15px; line-height: 1.75;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 28px 56px; }
+.wrap { max-width: 760px; margin: 0 auto; display: grid; gap: 28px; }
+header h1 { font-family: var(--display); font-weight: 900; font-size: clamp(24px, 5vw, 34px); line-height: 1.3; margin: 4px 0 8px; text-wrap: balance; }
+.eyebrow { font-size: 12px; letter-spacing: .12em; color: var(--felt); font-weight: 700; }
+.lead { color: var(--sub); margin: 0; }
+section { background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 20px max(16px, 3vw); display: grid; gap: 12px; min-width: 0; }
+h2 { font-size: 19px; font-weight: 900; margin: 0; text-wrap: balance; }
+h3 { font-size: 15px; font-weight: 700; margin: 8px 0 0; }
+p { margin: 0; }
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.kpi { background: var(--felt-soft); border-radius: 8px; padding: 12px 14px; }
+.kpi b { display: block; font-family: var(--mono); font-size: 24px; color: var(--felt); font-variant-numeric: tabular-nums; }
+.kpi span { font-size: 13px; color: var(--sub); }
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 620px) { .split { grid-template-columns: 1fr; } }
+.box { border-radius: 8px; padding: 14px; display: grid; gap: 6px; min-width: 0; }
+.ok { background: var(--felt-soft); } .ng { background: var(--warn-bg); }
+.box h3 { margin: 0; } .ok h3 { color: var(--felt); } .ng h3 { color: var(--aka); }
+.box ul { margin: 0; padding-left: 1.2em; }
+.tbl { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; font-size: 14px; }
+th, td { text-align: right; padding: 6px 8px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th:first-child, td:first-child { text-align: left; }
+th { font-size: 12px; color: var(--sub); font-weight: 500; }
+td.dim { color: var(--sub); }
+.bar { display: grid; grid-template-columns: 4.5em 1fr 7.5em; align-items: center; gap: 10px; font-size: 14px; }
+.bt { background: var(--felt-soft); border-radius: 4px; height: 14px; overflow: hidden; }
+.bt i { display: block; height: 100%; background: var(--felt); }
+.bar.red .bt i { background: var(--aka); }
+.bv { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.bv small { color: var(--sub); margin-left: 6px; font-family: var(--body); }
+.note { font-size: 13px; color: var(--sub); }
+.notes { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; }
+ol.steps { margin: 0; padding-left: 1.4em; display: grid; gap: 4px; }
+.back { font-size: 13px; margin: 0; } .back a { color: var(--felt); }
+td.plus b { color: var(--felt); } td.minus b { color: var(--aka); }
+td small { color: var(--sub); font-size: 12px; }
+@media (max-width: 620px) { td:first-child { white-space: normal; min-width: 6em; } th, td { padding: 6px 5px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+<p class="back"><a href="./">← 研究ノートの一覧</a></p>
+<header>
+  <div class="eyebrow">ザンリーグ 企業リーグのルール ・ 2026年10月24日</div>
+  <h1>ザンリーグ三麻シミュレーション 第8回 高い手のダマかリーチか・企業リーグのチームの方針</h1>
+  <p class="lead">高い手でもリーチするべきか。「ダマなら必ずアガれる・リーチすると出アガリできない」という極端な場合ではどうか。企業リーグでチームとしてどう打つのが得か、ライバルを落としに行くべきか。あわせて、第7回の槓の数字を、王牌の形を直して測り直しました。</p>
+</header>
+
+<section>
+  <h2>結論</h2>
+  <div class="kpis">
+    <div class="kpi"><b>-1.3</b><span>リーチしても倍満のまま（ダマ8〜9翻）の手を、ダマにしたときの損得（チップ）</span></div>
+    <div class="kpi"><b>+2.3</b><span>ダマなら必ずアガれ、リーチすると出アガリできないとしたときの、ダマ − リーチ（チップ）</span></div>
+  </div>
+  <ul class="notes">
+    <li>ふつうに打つなら、どの翻数でもリーチが得。リーチの1翻で点数が上がらない倍満の手でも、一発・裏ドラ・白ポッチの祝儀と、裏ドラで三倍満に届く分でリーチが上回ります。</li>
+    <li>「ダマなら必ずアガれる・リーチすると出アガリできない」という極端な場合は、満貫以上ならダマが得（満貫 +2.16、跳満 +3.44、倍満 +4.85）。1〜3翻は、必ずアガれるダマでも、ふつうのリーチとほぼ同じか下回りました。安い手は、確実にアガるよりリーチで高くするほうが得です。</li>
+    <li>企業リーグでは、順位を見て押し引きを変えても、ライバルを狙っても、ほとんど得になりません。1半荘ごとに自分のチップの期待値を一番大きくする打ち方を続けるのが一番よい、という結果でした。</li>
+  </ul>
+</section>
+
+<section>
+  <h2>1. 高い手のダマかリーチか（14,221局面）</h2>
+  <p>今いちばん強いAI 3人で打ち、相手のリーチが無いテンパイで、役がありダマでもロンできる局面を全部拾いました。その1回だけダマにして、同じ牌山で半荘の最後まで打ち直し、リーチしたときと最終チップを比べています。数字は ダマ − リーチ（負ならリーチが得）。全部で -1.20 ±0.08。</p>
+  <div class="tbl"><table><thead><tr><th>ダマでの翻数</th><th>局面</th><th>ダマ − リーチ</th></tr></thead><tbody><tr><td>1〜2翻</td><td>1,826</td><td class="minus"><b>-1.53</b> <small>±0.21</small></td></tr><tr><td>3翻</td><td>2,383</td><td class="minus"><b>-1.30</b> <small>±0.19</small></td></tr><tr><td>満貫（4〜5翻）</td><td>5,776</td><td class="minus"><b>-1.08</b> <small>±0.13</small></td></tr><tr><td>跳満（6〜7翻）</td><td>3,077</td><td class="minus"><b>-1.02</b> <small>±0.19</small></td></tr><tr><td>倍満（8〜10翻）</td><td>1,007</td><td class="minus"><b>-1.52</b> <small>±0.34</small></td></tr><tr><td>三倍満以上（11翻〜）</td><td>152</td><td class=""><b>-1.46</b> <small>±1.10</small></td></tr><tr><td>うち 5翻（リーチで跳満に届く）</td><td>2,398</td><td class="minus"><b>-0.90</b> <small>±0.19</small></td></tr><tr><td>うち 7翻（リーチで倍満に届く）</td><td>1,092</td><td class="minus"><b>-0.87</b> <small>±0.31</small></td></tr><tr><td>うち 8〜9翻（リーチしても倍満のまま）</td><td>881</td><td class="minus"><b>-1.31</b> <small>±0.35</small></td></tr></tbody></table></div>
+  <h3>ダマで満貫以上の手を、条件で分けると</h3>
+  <div class="tbl"><table><thead><tr><th>条件</th><th>局面</th><th>ダマ − リーチ</th></tr></thead><tbody><tr><td>待ちが愚形</td><td>6,910</td><td class="minus"><b>-1.00</b> <small>±0.13</small></td></tr><tr><td>待ちが良形</td><td>3,102</td><td class="minus"><b>-1.38</b> <small>±0.15</small></td></tr><tr><td>待ち牌4枚以下</td><td>7,042</td><td class="minus"><b>-0.99</b> <small>±0.13</small></td></tr><tr><td>待ち牌5枚以上</td><td>2,970</td><td class="minus"><b>-1.41</b> <small>±0.15</small></td></tr><tr><td>オーラス</td><td>1,087</td><td class="minus"><b>-0.86</b> <small>±0.21</small></td></tr><tr><td>オーラスでトップ目</td><td>392</td><td class="minus"><b>-1.03</b> <small>±0.29</small></td></tr><tr><td>親</td><td>3,659</td><td class="minus"><b>-1.41</b> <small>±0.18</small></td></tr></tbody></table></div>
+  <p class="note">点数表は満貫4翻・跳満6翻・倍満8翻・三倍満11翻から。緑は得、赤は損（差がぶれの2倍より大きい所だけ色を付けた）。</p>
+</section>
+
+<section>
+  <h2>2. ダマなら必ずアガれる・リーチすると出アガリできない、とした場合（10,712局面）</h2>
+  <p>同じ局面を、2通りの極端な形で打ち直しました。</p>
+  <ul class="notes">
+    <li>ダマ：その1回をダマにし、次に打つ相手が必ず当たり牌を出す（待ちの中から1枚）</li>
+    <li>リーチ：その局は、リーチしていない相手からは出アガリできない（ツモか、リーチした相手からのロンだけ）</li>
+  </ul>
+  <div class="tbl"><table><thead><tr><th>ダマでの翻数</th><th>局面</th><th>ダマ − リーチ</th><th>ダマ − ふつうのリーチ</th><th>リーチ − ふつうのリーチ</th></tr></thead><tbody><tr><td>1〜2翻</td><td>1,428</td><td class=""><b>+0.62</b> <small>±0.44</small></td><td class=""><b>-0.02</b> <small>±0.42</small></td><td class="minus"><b>-0.64</b> <small>±0.18</small></td></tr><tr><td>3翻</td><td>1,785</td><td class=""><b>+0.60</b> <small>±0.38</small></td><td class=""><b>-0.48</b> <small>±0.36</small></td><td class="minus"><b>-1.08</b> <small>±0.17</small></td></tr><tr><td>満貫（4〜5翻）</td><td>4,298</td><td class="plus"><b>+2.16</b> <small>±0.25</small></td><td class="plus"><b>+0.98</b> <small>±0.24</small></td><td class="minus"><b>-1.18</b> <small>±0.10</small></td></tr><tr><td>跳満（6〜7翻）</td><td>2,324</td><td class="plus"><b>+3.44</b> <small>±0.34</small></td><td class="plus"><b>+2.19</b> <small>±0.33</small></td><td class="minus"><b>-1.25</b> <small>±0.14</small></td></tr><tr><td>倍満（8〜10翻）</td><td>778</td><td class="plus"><b>+4.85</b> <small>±0.58</small></td><td class="plus"><b>+3.48</b> <small>±0.58</small></td><td class="minus"><b>-1.37</b> <small>±0.23</small></td></tr><tr><td>三倍満以上（11翻〜）</td><td>99</td><td class="plus"><b>+11.32</b> <small>±1.84</small></td><td class="plus"><b>+8.43</b> <small>±1.80</small></td><td class="minus"><b>-2.89</b> <small>±0.96</small></td></tr></tbody></table></div>
+  <p class="note">全部で ダマ − リーチ +2.25 ±0.16。「必ずアガれるダマ」はふつうのリーチより +1.11、「出アガリできないリーチ」はふつうのリーチより -1.14。</p>
+</section>
+
+<section>
+  <h2>3. 企業リーグでチームとしてどう打つか</h2>
+  <p>25チーム・1チーム4人・1人6半荘（チームで24半荘）のリーグ戦を回し、上位9チームが準決勝（チップを半分持ち越し・1チーム4半荘）、上位3チームが決勝（半分持ち越し・4半荘）とした形で、1チームの方針だけを変えて5,000シーズンずつ比べました。ほかの24チームはいつも今の打ち方です。卓の組み合わせはくじ、準決勝と決勝の半荘の数は仮に置いた形です。</p>
+  <div class="tbl"><table><thead><tr><th>方針</th><th>準決勝</th><th>決勝</th><th>優勝</th></tr></thead><tbody><tr><td>いつも今の打ち方</td><td>36.5%</td><td>13.1%</td><td>3.96%</td></tr><tr><td>いつも攻め寄り（押し引きの線 −1）</td><td>34.6%</td><td>11.5%</td><td>3.74%</td></tr><tr><td>いつも少し攻め寄り（−0.5）</td><td>38.2%</td><td>13.1%</td><td>4.98%</td></tr><tr><td>いつも少し守り寄り（+0.5）</td><td>34.5%</td><td>10.7%</td><td>3.22%</td></tr><tr><td>いつも守り寄り（+1）</td><td>29.9%</td><td>7.5%</td><td>2.06%</td></tr><tr><td>順位で切り替える27通り</td><td>33.9%〜37.2%</td><td>10.4%〜12.7%</td><td>3.12%〜4.34%</td></tr></tbody></table></div>
+  <p class="note">準決勝の率のぶれは ±0.7ポイントほど。「順位で切り替える」は、残り6・12・24半荘から、準決勝に残る線より10・20・40枚上なら守り寄り、下なら攻め寄りに切り替える方針（片方だけも含む）。</p>
+  <h3>打ち方を変えても、1半荘の振れ幅はほとんど変わらない</h3>
+  <div class="tbl"><table><thead><tr><th>打ち方</th><th>半荘</th><th>平均チップ</th><th>ばらつき</th></tr></thead><tbody><tr><td>今の打ち方</td><td>9,000</td><td>+0.00</td><td>15.91</td></tr><tr><td>攻め寄り（−1）</td><td>3,000</td><td>-0.13</td><td>16.06</td></tr><tr><td>少し攻め寄り（−0.5）</td><td>3,000</td><td>+0.17</td><td>16.06</td></tr><tr><td>少し守り寄り（+0.5）</td><td>3,000</td><td>-0.12</td><td>15.73</td></tr><tr><td>守り寄り（+1）</td><td>3,000</td><td>-0.59</td><td>15.61</td></tr></tbody></table></div>
+  <p class="note">押し引きの線をずらしても、1半荘のチップのばらつきは15.6〜16.1でほとんど変わりません。線より下で勝負に出る・上で守り切る、としても結果の振れ幅を動かせないので、切り替えても得になりません。</p>
+  <h3>ライバルのチップ1枚は、自分のチップ何枚ぶんか</h3>
+  <p>リーグ戦の途中で止め、同じ続きで「自分 +5枚」と「ライバル −5枚」を打ち切って、準決勝に残る率が何ポイント上がるかを比べました（2万シーズン×30回）。線から20枚以内の場面だけを載せます。</p>
+  <div class="tbl"><table><thead><tr><th>場面</th><th>自分 +5枚</th><th>線のチーム（9番目）−5枚</th><th>点が一番近いチーム −5枚</th></tr></thead><tbody><tr><td>残り12半荘・線の上（20枚以内）</td><td>+3.4</td><td>+0.2（0.06倍）</td><td>+0.2（0.06倍）</td></tr><tr><td>残り12半荘・線の下（20枚以内）</td><td>+3.1</td><td>+0.2（0.06倍）</td><td>+0.2（0.06倍）</td></tr><tr><td>残り6半荘・線の上（20枚以内）</td><td>+4.5</td><td>+0.4（0.09倍）</td><td>+0.4（0.09倍）</td></tr><tr><td>残り6半荘・線の下（20枚以内）</td><td>+4.4</td><td>+0.4（0.09倍）</td><td>+0.3（0.08倍）</td></tr><tr><td>残り3半荘・線の上（20枚以内）</td><td>+6.0</td><td>+0.8（0.13倍）</td><td>+0.8（0.13倍）</td></tr><tr><td>残り3半荘・線の下（20枚以内）</td><td>+5.7</td><td>+0.8（0.14倍）</td><td>+0.6（0.11倍）</td></tr><tr><td>残り1半荘・線の上（20枚以内）</td><td>+8.7</td><td>+2.2（0.25倍）</td><td>+1.6（0.18倍）</td></tr><tr><td>残り1半荘・線の下（20枚以内）</td><td>+8.2</td><td>+2.1（0.26倍）</td><td>+1.4（0.17倍）</td></tr></tbody></table></div>
+  <p class="note">ライバルの1枚は、いちばん効く最後の1半荘でも自分の1枚の4分の1ほど。準決勝の線は24チームの点で決まるので、1チームを落としても線はほとんど動きません。押し引きの記録で、目当てを「自分 − 0.25×ライバル」に替えても、押すかオリるかの答えが変わる局面は1つだけ（ライバルではない人のリーチを受けた、終盤の1シャンテン）でした。</p>
+</section>
+
+<section>
+  <h2>4. 第7回の数字と、そのあとの打ち比べの直し</h2>
+  <p>第7回は、槓ドラの表示牌を王牌の補充牌から取り、海底を1枚ずらす形で打っていました。正しくは、王牌の補充牌は8枚（華牌4枚と槓4つの分）で、槓ドラ・槓裏の表示牌はドラ表示牌の隣の幢（山の最後）を使います。この形に直して、第7回の数字と、そのあとに測った打ち比べ（七対子の切り方・トイトイ・押し引きの表の取り直し）を測り直しました。</p>
+  <div class="tbl"><table><thead><tr><th>数字</th><th>直す前</th><th>直した後</th></tr></thead><tbody><tr><td>リーチ後の暗槓</td><td>+1.76</td><td class="plus"><b>+1.71</b> <small>±0.30</small></td></tr><tr><td>　待ちが良形</td><td>+2.18</td><td class="plus"><b>+3.06</b> <small>±0.59</small></td></tr><tr><td>　待ちが愚形</td><td>+1.57</td><td class="plus"><b>+1.11</b> <small>±0.34</small></td></tr><tr><td>リーチ前の暗槓・手の形が崩れる</td><td>−0.74〜−1.61</td><td class="minus"><b>-1.03</b> <small>±0.16</small></td></tr><tr><td>加槓</td><td>+0.09</td><td class=""><b>-0.14</b> <small>±0.23</small></td></tr><tr><td>明槓</td><td>−1.76</td><td class="minus"><b>-1.55</b> <small>±0.17</small></td></tr><tr><td>いつも槓する − 槓しない</td><td>−1.30</td><td class="minus"><b>-1.33</b> <small>±0.25</small></td></tr><tr><td>得になる槓だけする − 槓しない</td><td>+0.40</td><td class="plus"><b>+0.38</b> <small>±0.18</small></td></tr><tr><td>七対子の切り方を直した − 直す前</td><td>+0.50</td><td class=""><b>+0.32</b> <small>±0.18</small></td></tr><tr><td>トイトイ狙いのポンを足す − 足さない</td><td>−0.10</td><td class=""><b>-0.24</b> <small>±0.18</small></td></tr><tr><td>押し引きの表を取り直す − 取り直さない</td><td>+0.11</td><td class=""><b>-0.15</b> <small>±0.18</small></td></tr></tbody></table></div>
+  <p class="note">リーチ後の暗槓は得、明槓は損、形が崩れる暗槓は損、という向きは変わりません。リーチ後の暗槓は良形と愚形の差が開き、加槓は損得なしに近くなりました。上の打ち比べの数字は1半荘あたりのチップで、2回の打ち比べを合わせたもの。</p>
+</section>
+
+<section>
+  <h2>この数字の前提</h2>
+  <ul class="notes">
+    <li>どの数字も、AIどうしの卓の数字です。</li>
+    <li>ダマかリーチかで、相手のリーチを受けて押すテンパイは測っていません（今のAIはいつもリーチします）。</li>
+    <li>企業リーグの形のうち、卓の組み合わせ方と準決勝・決勝の半荘の数は仮に置いています。</li>
+  </ul>
+</section>
+</div>
+
+</body>
+</html>
