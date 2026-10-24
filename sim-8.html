@@ -69,18 +69,18 @@ td small { color: var(--sub); font-size: 12px; }
 <header>
   <div class="eyebrow">ザンリーグ 企業リーグのルール ・ 2026年10月24日</div>
   <h1>ザンリーグ三麻シミュレーション 第8回 高い手のダマかリーチか・企業リーグのチームの方針</h1>
-  <p class="lead">高い手でもリーチするべきか。「ダマなら必ずアガれる・リーチすると出アガリできない」という極端な場合ではどうか。企業リーグでチームとしてどう打つのが得か、ライバルを落としに行くべきか。あわせて、第7回の槓の数字を、王牌の形を直して測り直しました。</p>
+  <p class="lead">高い手でもリーチするべきか。「リーチすると相手から絶対に出ない・ダマなら相手は無警戒」の対決ではどうか。企業リーグでチームとしてどう打つのが得か、ライバルを落としに行くべきか。あわせて、第7回の槓の数字を、王牌の形を直して測り直しました。</p>
 </header>
 
 <section>
   <h2>結論</h2>
   <div class="kpis">
     <div class="kpi"><b>-1.3</b><span>リーチしても倍満のまま（ダマ8〜9翻）の手を、ダマにしたときの損得（チップ）</span></div>
-    <div class="kpi"><b>+2.3</b><span>ダマなら必ずアガれ、リーチすると出アガリできないとしたときの、ダマ − リーチ（チップ）</span></div>
+    <div class="kpi"><b>+0.7</b><span>リーチなら絶対に出ない・ダマなら相手は無警戒、としたときの跳満の手の ダマ − リーチ（チップ）</span></div>
   </div>
   <ul class="notes">
     <li>ふつうに打つなら、どの翻数でもリーチが得。リーチの1翻で点数が上がらない倍満の手でも、一発・裏ドラ・白ポッチの祝儀と、裏ドラで三倍満に届く分でリーチが上回ります。</li>
-    <li>「ダマなら必ずアガれる・リーチすると出アガリできない」という極端な場合は、満貫以上ならダマが得（満貫 +2.16、跳満 +3.44、倍満 +4.85）。1〜3翻は、必ずアガれるダマでも、ふつうのリーチとほぼ同じか下回りました。安い手は、確実にアガるよりリーチで高くするほうが得です。</li>
+    <li>「リーチすると相手から絶対に出ない・ダマなら相手は無警戒で自分の手を進める」の対決では、満貫以上ならダマが少し得（満貫 +0.26、跳満 +0.69）、1〜2翻はリーチが得の向き（-0.28）。ダマ寄りになるのは、待ちが愚形・待ち牌が少ない・終盤・オーラスのとき。それでも差は1回あたり1チップ以内で、相手が全く出してくれないリーチでも、ダマと五分に近い所にあります。</li>
     <li>企業リーグでは、順位を見て押し引きを変えても、ライバルを狙っても、ほとんど得になりません。1半荘ごとに自分のチップの期待値を一番大きくする打ち方を続けるのが一番よい、という結果でした。</li>
   </ul>
 </section>
@@ -95,14 +95,16 @@ td small { color: var(--sub); font-size: 12px; }
 </section>
 
 <section>
-  <h2>2. ダマなら必ずアガれる・リーチすると出アガリできない、とした場合（10,712局面）</h2>
-  <p>同じ局面を、2通りの極端な形で打ち直しました。</p>
+  <h2>2. リーチすると絶対に出ない・ダマなら相手は無警戒、の対決（10,712局面）</h2>
+  <p>同じ局面を、2通りで打ち直しました。</p>
   <ul class="notes">
-    <li>ダマ：その1回をダマにし、次に打つ相手が必ず当たり牌を出す（待ちの中から1枚）</li>
-    <li>リーチ：その局は、リーチしていない相手からは出アガリできない（ツモか、リーチした相手からのロンだけ）</li>
+    <li>リーチ：その局は、リーチしていない相手からは絶対に出ない（ツモか、リーチした相手からのロンだけ）</li>
+    <li>ダマ：相手はダマに気づかず、オリずに自分の手を進める（当たり牌はふつうの打牌の流れで出る）</li>
   </ul>
-  <div class="tbl"><table><thead><tr><th>ダマでの翻数</th><th>局面</th><th>ダマ − リーチ</th><th>ダマ − ふつうのリーチ</th><th>リーチ − ふつうのリーチ</th></tr></thead><tbody><tr><td>1〜2翻</td><td>1,428</td><td class=""><b>+0.62</b> <small>±0.44</small></td><td class=""><b>-0.02</b> <small>±0.42</small></td><td class="minus"><b>-0.64</b> <small>±0.18</small></td></tr><tr><td>3翻</td><td>1,785</td><td class=""><b>+0.60</b> <small>±0.38</small></td><td class=""><b>-0.48</b> <small>±0.36</small></td><td class="minus"><b>-1.08</b> <small>±0.17</small></td></tr><tr><td>満貫（4〜5翻）</td><td>4,298</td><td class="plus"><b>+2.16</b> <small>±0.25</small></td><td class="plus"><b>+0.98</b> <small>±0.24</small></td><td class="minus"><b>-1.18</b> <small>±0.10</small></td></tr><tr><td>跳満（6〜7翻）</td><td>2,324</td><td class="plus"><b>+3.44</b> <small>±0.34</small></td><td class="plus"><b>+2.19</b> <small>±0.33</small></td><td class="minus"><b>-1.25</b> <small>±0.14</small></td></tr><tr><td>倍満（8〜10翻）</td><td>778</td><td class="plus"><b>+4.85</b> <small>±0.58</small></td><td class="plus"><b>+3.48</b> <small>±0.58</small></td><td class="minus"><b>-1.37</b> <small>±0.23</small></td></tr><tr><td>三倍満以上（11翻〜）</td><td>99</td><td class="plus"><b>+11.32</b> <small>±1.84</small></td><td class="plus"><b>+8.43</b> <small>±1.80</small></td><td class="minus"><b>-2.89</b> <small>±0.96</small></td></tr></tbody></table></div>
-  <p class="note">全部で ダマ − リーチ +2.25 ±0.16。「必ずアガれるダマ」はふつうのリーチより +1.11、「出アガリできないリーチ」はふつうのリーチより -1.14。</p>
+  <div class="tbl"><table><thead><tr><th>ダマでの翻数</th><th>局面</th><th>ダマ − リーチ（出ない）</th><th>ダマ − ふつうのリーチ</th><th>リーチ（出ない）− ふつうのリーチ</th></tr></thead><tbody><tr><td>1〜2翻</td><td>1,428</td><td class=""><b>-0.28</b> <small>±0.28</small></td><td class="minus"><b>-0.93</b> <small>±0.23</small></td><td class="minus"><b>-0.64</b> <small>±0.18</small></td></tr><tr><td>3翻</td><td>1,785</td><td class=""><b>+0.18</b> <small>±0.26</small></td><td class="minus"><b>-0.89</b> <small>±0.22</small></td><td class="minus"><b>-1.08</b> <small>±0.17</small></td></tr><tr><td>満貫（4〜5翻）</td><td>4,298</td><td class=""><b>+0.26</b> <small>±0.16</small></td><td class="minus"><b>-0.92</b> <small>±0.14</small></td><td class="minus"><b>-1.18</b> <small>±0.10</small></td></tr><tr><td>跳満（6〜7翻）</td><td>2,324</td><td class="plus"><b>+0.69</b> <small>±0.24</small></td><td class="minus"><b>-0.56</b> <small>±0.21</small></td><td class="minus"><b>-1.25</b> <small>±0.14</small></td></tr><tr><td>倍満（8〜10翻）</td><td>778</td><td class=""><b>+0.25</b> <small>±0.42</small></td><td class="minus"><b>-1.12</b> <small>±0.39</small></td><td class="minus"><b>-1.37</b> <small>±0.23</small></td></tr><tr><td>三倍満以上（11翻〜）</td><td>99</td><td class=""><b>+1.55</b> <small>±1.65</small></td><td class=""><b>-1.34</b> <small>±1.41</small></td><td class="minus"><b>-2.89</b> <small>±0.96</small></td></tr><tr><td>うち 5翻（リーチで跳満に届く）</td><td>1,865</td><td class=""><b>+0.32</b> <small>±0.24</small></td><td class="minus"><b>-0.90</b> <small>±0.22</small></td><td class="minus"><b>-1.22</b> <small>±0.16</small></td></tr><tr><td>うち 7翻（リーチで倍満に届く）</td><td>820</td><td class="plus"><b>+1.29</b> <small>±0.40</small></td><td class=""><b>-0.10</b> <small>±0.36</small></td><td class="minus"><b>-1.39</b> <small>±0.22</small></td></tr><tr><td>うち 8〜9翻（リーチしても倍満のまま）</td><td>680</td><td class=""><b>+0.36</b> <small>±0.45</small></td><td class="minus"><b>-0.85</b> <small>±0.41</small></td><td class="minus"><b>-1.21</b> <small>±0.23</small></td></tr></tbody></table></div>
+  <h3>ダマで満貫以上の手を、条件で分けると（ダマ − リーチ（出ない））</h3>
+  <div class="tbl"><table><thead><tr><th>条件</th><th>局面</th><th>ダマ − リーチ（出ない）</th></tr></thead><tbody><tr><td>待ちが愚形</td><td>5,192</td><td class="plus"><b>+0.52</b> <small>±0.16</small></td></tr><tr><td>待ちが良形</td><td>2,307</td><td class=""><b>+0.16</b> <small>±0.20</small></td></tr><tr><td>待ち牌4枚以下</td><td>5,302</td><td class="plus"><b>+0.54</b> <small>±0.16</small></td></tr><tr><td>待ち牌5枚以上</td><td>2,197</td><td class=""><b>+0.10</b> <small>±0.21</small></td></tr><tr><td>オーラス</td><td>798</td><td class="plus"><b>+0.80</b> <small>±0.29</small></td></tr><tr><td>オーラスでトップ目</td><td>290</td><td class=""><b>+0.43</b> <small>±0.40</small></td></tr><tr><td>親</td><td>2,771</td><td class=""><b>-0.01</b> <small>±0.23</small></td></tr><tr><td>残りのツモ29枚以下</td><td>952</td><td class="plus"><b>+0.91</b> <small>±0.31</small></td></tr></tbody></table></div>
+  <p class="note">全部で ダマ − リーチ（出ない）+0.28 ±0.11。リーチが相手から全く出なくなると、ふつうのリーチより1回 -1.14 下がり、ダマとほぼ並びます。ふつうの卓ではリーチにも当たり牌が出るので、1.の表のとおりリーチが得です。</p>
 </section>
 
 <section>
